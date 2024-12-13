@@ -1,0 +1,17 @@
+@startuml
+actor User
+participant "Authentication Service" as Auth
+participant "Issue Management Service" as IssueService
+participant "Notification Service" as Notify
+database "Database" as DB
+
+User -> Auth: Xác thực
+Auth --> User: Cấp quyền
+User -> IssueService: Tạo Issue mới
+IssueService -> DB: Kiểm tra quyền
+DB --> IssueService: Xác nhận quyền
+IssueService -> DB: Lưu Issue
+DB --> IssueService: Xác nhận lưu
+IssueService -> Notify: Gửi thông báo
+Notify --> User: Thông báo tạo Issue
+@enduml
