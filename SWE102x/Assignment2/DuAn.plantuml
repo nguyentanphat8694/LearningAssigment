@@ -1,0 +1,63 @@
+@startuml
+class Department {
+  - id: UUID
+  - name: String
+  - code: String
+  - parentDepartment: Department
+  - createdAt: DateTime
+  - updatedAt: DateTime
+
+  + create(departmentData: DepartmentData)
+  + update(updateData: DepartmentUpdateData)
+  + delete()
+  + addMember(user: User)
+  + removeMember(user: User)
+  + setManager(user: User)
+  + listMembers(): List<User>
+}
+
+class User {
+  - id: UUID
+  - username: String
+  - email: String
+  - fullName: String
+  - departments: List<Department>
+  - roles: List<Role>
+
+  + assignToDepartment(department: Department)
+  + removeDepartment(department: Department)
+  + changeRole(department: Department, role: Role)
+}
+
+class Role {
+  <<enumeration>>
+  MANAGER
+  MEMBER
+  ADMIN
+  VIEWER
+}
+
+class DepartmentHierarchy {
+  - department: Department
+  - subDepartments: List<Department>
+  
+  + addSubDepartment(department: Department)
+  + removeSubDepartment(department: Department)
+  + listAllSubDepartments(): List<Department>
+}
+
+class Permissions {
+  - department: Department
+  - allowedActions: List<Action>
+  
+  + grantPermission(user: User, action: Action)
+  + revokePermission(user: User, action: Action)
+  + checkPermission(user: User, action: Action): Boolean
+}
+
+Department "1" *-- "0..*" Department : has sub-departments
+Department "1" -- "0..*" User : has members
+User "*" -- "*" Department : belongs to
+Department "1" -- "1" Permissions : defines
+Department "1" -- "1" DepartmentHierarchy : manages hierarchy
+@enduml
