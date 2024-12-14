@@ -1,0 +1,22 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\ndự án" as qlda
+database "Department Table" as dbd
+
+== Quy Trình Lấy thông tin Phòng ban ==
+nd -> pm : Gửi yêu cầu lấy thông tin
+pm -> qlpb : Gửi yêu cầu lấy thông tin
+activate qlpb
+qlpb -> dbd : Lấy thông tin dữ liệu
+dbd --> qlpb : Thông tin phòng ban
+qlpb -> qlda : Lấy thông tin các dự án
+qlda --> qlpb : Thông tin các dự án
+qlpb -> qlnd : Lấy thông tin các thành viên
+qlnd --> qlpb : Thông tin các thành viên
+qlpb --> pm : Thông tin phòng ban
+deactivate qlpb
+pm --> nd : Thông tin phòng ban
+@enduml

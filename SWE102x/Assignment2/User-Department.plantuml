@@ -1,0 +1,25 @@
+@startuml
+actor Administrator as amd
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý người dùng" as qlnd
+participant "Quản lý phòng ban" as qlpb
+database "User Table" as dbu
+database "Role Table" as dbr
+
+== Quy Trình Gán User vào phòng ban ==
+amd -> pm : Yêu cầu gán user vào phòng ban
+pm -> qlnd : Lấy thông tin người dùng
+activate qlnd
+qlnd -> qlpb : Lấy danh sách phòng ban
+qlpb --> qlnd : Trả về danh sách phòng ban
+qlnd --> pm : Trả về thông tin người dùng\n và danh sách phòng ban
+pm --> amd : Thông tin người dùng và danh sách phòng ban
+amd -> pm : Gán người dùng vào phòng ban với ID cụ thể
+pm -> qlnd : Yêu cầu gán user vào phòng ban
+qlnd -> dbu : Lưu phòng ban ID vào user
+dbu --> qlnd : Xác nhận lưu thành công
+qlnd --> pm : Thông báo gán thành công
+deactivate qlnd
+pm --> amd : Thông báo gán thành công
+@enduml

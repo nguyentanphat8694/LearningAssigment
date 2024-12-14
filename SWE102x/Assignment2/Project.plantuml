@@ -1,0 +1,64 @@
+@startuml
+abstract class BaseEntity {
+  +id: Long
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+class Project {
+  + name: String
+  + code: String
+  + description: String
+
+  + create(creatData: Project)
+  + update(updateData: Project)
+  + delete(id: Long)
+  + getProjectInfo()
+  + getListProjects()
+  + listMembers(): List<User>
+  + listMilestones(): List<Milestone>
+  + listReleases(): List<Release>
+  + listIssues(status: String): List<Issue>
+}
+class User {
+  +username: String
+  +email: String
+  +firstName: String
+  +lastName: String
+}
+class Department {
+  + name: String
+  + code: String
+  + description: String
+}
+class Milestone {
+  +name: String
+  +code: String
+  +description: String
+  +startDate: DateTime
+  +endtDate: DateTime
+}
+class Release {
+  +name: String
+  +code: String
+  +description: String
+  +releaseDate: DateTime
+}
+class Issue {
+  +name: String
+  +code: String
+  +description: String
+  +status: DateTime
+  +userId: Long
+}
+BaseEntity <|-- Project
+BaseEntity <|-- User
+BaseEntity <|-- Department
+BaseEntity <|-- Milestone
+BaseEntity <|-- Release
+BaseEntity <|-- Issue
+User "0..*" -- "1" Project : belongs to
+User "0..*" -- "1" Milestone : belongs to
+User "0..*" -- "1" Release : belongs to
+User "0..*" -- "1" Issue : belongs to
+Project "0..*" -- "1" Department : belongs to
+@enduml

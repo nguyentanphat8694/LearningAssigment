@@ -1,0 +1,31 @@
+@startuml
+actor Administrator as amd
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý người dùng" as qlnd
+participant "Quản lý phòng ban" as qlpb
+database "User Table" as dbu
+database "Role Table" as dbr
+
+== Quy Trình Đăng nhập ==
+nd -> pm : Yêu cầu đăng nhập
+pm -> qlnd : Yêu cầu đăng nhập
+activate qlnd
+qlnd -> dbu : Kiểm tra username có tồn tại
+alt username tồn tại
+dbu --> qlnd : username tồn tại\ntrả về username và hashed password
+qlnd -> qlnd: hash password và so sánh
+    alt thông tin đăng nhập đúng
+    qlnd --> pm : Thông báo đăng nhập thành công và token
+    pm --> nd : Thông báo đăng nhập thành công
+    else thông tin đăng nhập Sienna
+    qlnd --> pm : Thông báo sai password
+    pm --> nd : Thông báo sai password
+    end
+else username không tồn tại
+dbu --> qlnd : username không tồn tại
+qlnd --> pm : Thông báo username không tồn tại
+deactivate qlnd
+pm --> nd : Thông báo username không tồn tại
+end
+@enduml

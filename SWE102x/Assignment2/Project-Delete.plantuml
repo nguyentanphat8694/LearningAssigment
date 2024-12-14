@@ -1,0 +1,21 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\ndự án" as qlda
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\nmilestone" as qlms
+participant "Quản lý\nrelease" as qlrl
+participant "Quản lý\nissue" as qlis
+database "Project Table" as dbp
+
+== Quy Trình Xóa Dụ án ==
+nd -> pm : Gửi yêu cầu xóa
+pm -> qlda : Gửi yêu cầu xóa
+activate qlda
+qlda -> dbp : Xóa dữ liệu
+dbp --> qlda : Xác nhận xóa thành công
+qlda --> pm : Xác nhận xóa thành công
+deactivate qlda
+pm --> nd : Thông báo xóa thành công
+@enduml

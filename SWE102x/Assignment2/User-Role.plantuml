@@ -1,0 +1,27 @@
+@startuml
+actor Administrator as amd
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý người dùng" as qlnd
+participant "Quản lý phòng ban" as qlpb
+database "User Table" as dbu
+database "Role Table" as dbr
+
+== Quy Trình Phân quyền user ==
+amd -> pm : Yêu cầu phân quyền
+pm -> qlnd : Lấy thông tin người dùng
+activate qlnd
+qlnd -> dbr : Lấy danh sách role
+dbr --> qlnd : Trả về danh sách role
+qlnd --> pm : Trả về thông tin người dùng\n và danh sách role
+pm --> amd : Thông tin người dùng và danh sách role
+amd -> pm : Phân quyền user với role ID cụ thể
+pm -> qlnd : Yêu cầu phân quyền user với role
+qlnd -> dbu : Lưu role ID vào user
+dbu --> qlnd : Xác nhận lưu thành công
+qlnd --> pm : Thông báo phân quyền thành công
+deactivate qlnd
+pm --> amd : Thông báo phân quyền thành công
+
+
+@enduml

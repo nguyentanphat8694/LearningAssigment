@@ -1,0 +1,29 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\ndự án" as qlda
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\nmilestone" as qlms
+participant "Quản lý\nrelease" as qlrl
+participant "Quản lý\nissue" as qlis
+database "Project Table" as dbp
+
+== Quy Trình Lấy thông tin Dự án ==
+nd -> pm : Gửi yêu cầu lấy thông tin
+pm -> qlda : Gửi yêu cầu lấy thông tin
+activate qlda
+qlda -> dbp : Lấy thông tin dữ liệu
+dbp --> qlda : Thông tin dự án
+qlda -> qlnd : Lấy thông tin các thành viên
+qlnd --> qlda : Thông tin các thành viên
+qlda -> qlms : Lấy thông tin các milestone
+qlms --> qlda : Thông tin các milestone
+qlda -> qlrl : Lấy thông tin các release
+qlrl --> qlda : Thông tin các release
+qlda -> qlis : Lấy thông tin các issue
+qlis --> qlda : Thông tin các issue
+qlda --> pm : Thông tin phòng ban
+deactivate qlda
+pm --> nd : Thông tin phòng ban
+@enduml

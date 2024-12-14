@@ -1,0 +1,28 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\ndự án" as qlda
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\nmilestone" as qlms
+participant "Quản lý\nrelease" as qlrl
+participant "Quản lý\nissue" as qlis
+database "Project Table" as dbp
+
+== Quy Trình Tạo Dụ án ==
+nd -> pm : Gửi yêu cầu tạo mới
+pm -> qlda : Kiểm tra thông tin phòng ban
+activate qlda
+alt Tạo thành công
+qlda --> pm : Tên chưa tồn tại
+pm -> qlda : Yêu cầu tạo mới
+qlda -> dbp : Lưu trữ thông tin
+dbp --> qlda : Xác nhận lưu thành công
+qlda --> pm : Xác nhận tạo thành công
+pm --> nd : Thông báo tạo thành công
+else Tạo thất bại
+qlda --> pm : Tên đã tồn tại
+deactivate qlda
+pm --> nd : Thông báo đã tồn tại
+end
+@enduml

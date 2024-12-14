@@ -1,0 +1,25 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\ndự án" as qlda
+database "Department Table" as dbd
+
+== Quy Trình Tạo Phòng ban ==
+nd -> pm : Gửi yêu cầu tạo mới
+pm -> qlpb : Kiểm tra thông tin phòng ban
+activate qlpb
+alt Tạo thành công
+qlpb --> pm : Tên chưa tồn tại
+pm -> qlpb : Yêu cầu tạo mới
+qlpb -> dbd : Lưu trữ thông tin
+dbd --> qlpb : Xác nhận lưu thành công
+qlpb --> pm : Xác nhận tạo thành công
+pm --> nd : Thông báo tạo thành công
+else Tạo thất bại
+qlpb --> pm : Tên đã tồn tại
+deactivate qlpb
+pm --> nd : Thông báo đã tồn tại
+end
+@enduml

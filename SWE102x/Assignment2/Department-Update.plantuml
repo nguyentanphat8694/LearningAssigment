@@ -1,0 +1,24 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\ndự án" as qlda
+database "Department Table" as dbd
+
+== Quy Trình Chỉnh sửa Phòng ban ==
+nd -> pm : Gửi yêu cầu chỉnh sửa
+pm -> qlpb : Gửi yêu cầu chỉnh sửa
+activate qlpb
+qlpb -> qlpb : Kiểm tra thông tin
+alt Chỉnh sửa thành công
+qlpb -> dbd : Chỉnh sửa dữ liệu
+dbd --> qlpb : Xác nhận chỉnh sửa thành công
+qlpb --> pm : Xác nhận chỉnh sửa thành công
+pm --> nd : Thông báo chỉnh sửa thành công
+else Chỉnh sửa thất bại
+qlpb --> pm : Tên đã tồn tại
+deactivate qlpb
+pm --> nd : Thôn báo tên đã tồn tại
+end
+@enduml

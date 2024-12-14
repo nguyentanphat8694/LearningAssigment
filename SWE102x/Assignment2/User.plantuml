@@ -1,0 +1,46 @@
+@startuml
+abstract class BaseEntity {
+  +id: Long
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class User {
+  +username: String
+  +email: String
+  +passwordHash: String
+  +firstName: String
+  +lastName: String
+  +phoneNumber: String
+  +isActive: Boolean
+  +roleId: Long
+  +departmentId: Long  
+
+  +checkUserNameExist(userName: String)
+  +create(userInfo: User)
+  +hashPassword(password: String)
+  +changePassword(newPassword: String)
+  +getProfile(id: Long)
+  +updateProfile(firstName: String, lastName: String, phoneNumber: String)
+  +activate()
+  +deactivate()
+  +updateRole(roleId: Long)
+  +updateDepartment(departmentId: Long)
+  +login(username: String, password: String)
+}
+class Department {
+  +name: String
+  +code: String
+  +description: String
+
+  +getList()
+}
+class Role {
+  +name: String
+  +description: String
+}
+BaseEntity <|-- User
+BaseEntity <|-- Department
+BaseEntity <|-- Role
+Department "1" -- "0..*" User : contains
+@enduml

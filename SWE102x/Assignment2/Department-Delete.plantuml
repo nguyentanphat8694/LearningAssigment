@@ -1,0 +1,18 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nphòng ban" as qlpb
+participant "Quản lý\nngười dùng" as qlnd
+participant "Quản lý\ndự án" as qlnda
+database "Department Table" as dbd
+
+== Quy Trình Xóa Phòng ban ==
+nd -> pm : Gửi yêu cầu xóa
+pm -> qlpb : Gửi yêu cầu xóa
+activate qlpb
+qlpb -> dbd : Xóa dữ liệu
+dbd --> qlpb : Xác nhận xóa thành công
+qlpb --> pm : Xác nhận xóa thành công
+deactivate qlpb
+pm --> nd : Thông báo xóa thành công
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+actor Administrator as amd
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý người dùng" as qlnd
+participant "Quản lý phòng ban" as qlpb
+database "User Table" as dbu
+database "Role Table" as dbr
+
+== Quy Trình Tạo User ==
+nd -> pm : Gửi yêu cầu tạo mới
+pm -> qlnd : Kiểm tra thông tin người dùng
+activate qlnd
+alt Tạo thành công
+qlnd --> pm : username chưa tồn tại
+pm -> qlnd : Yêu cầu tạo mới
+qlnd -> qlnd : hash password
+qlnd -> dbu : Lưu trữ thông tin người dùng 
+dbu --> qlnd : Xác nhận lưu thành công
+qlnd --> pm : Xác nhận tạo thành công
+pm --> nd : Thông báo tạo thành công
+else Tạo thất bại
+qlnd --> pm : username đã tồn tại
+deactivate qlnd
+pm --> nd : Thông báo username đã tồn tại
+end
+@enduml

@@ -1,0 +1,36 @@
+@startuml
+abstract class BaseEntity {
+  +id: Long
+  +createdAt: DateTime
+  +updatedAt: DateTime
+}
+
+class Department {
+  + name: String
+  + code: String
+  + description: String
+
+  + create(departmentData: Department)
+  + update(updateData: Department)
+  + delete(id: Long)
+  + getDepartmentInfo()
+  + listMembers(): List<User>
+  + listProjects(): List<Project>
+}
+class User {
+  +username: String
+  +email: String
+  +firstName: String
+  +lastName: String
+}
+class Project {
+  +name: String
+  +code: String
+  +description: String
+}
+BaseEntity <|-- Department
+BaseEntity <|-- User
+BaseEntity <|-- Project
+User "0..*" -- "1" Department : belongs to
+Project "0..*" -- "1" Department : belongs to
+@enduml
