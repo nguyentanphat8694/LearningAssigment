@@ -1,0 +1,23 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nmilestone" as qlms
+database "Milestone Table" as dbm
+
+== Quy Trình Tạo Milestone ==
+nd -> pm : Gửi yêu cầu tạo mới
+pm -> qlms : Kiểm tra thông tin milestone
+activate qlms
+alt Tạo thành công
+qlms --> pm : Tên chưa tồn tại
+pm -> qlms : Yêu cầu tạo mới
+qlms -> dbm : Lưu trữ thông tin
+dbm --> qlms : Xác nhận lưu thành công
+qlms --> pm : Xác nhận tạo thành công
+pm --> nd : Thông báo tạo thành công
+else Tạo thất bại
+qlms --> pm : Tên đã tồn tại
+deactivate qlms
+pm --> nd : Thông báo đã tồn tại
+end
+@enduml

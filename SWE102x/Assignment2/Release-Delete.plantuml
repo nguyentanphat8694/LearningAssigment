@@ -1,0 +1,16 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nrelease" as qlrl
+database "Release Table" as dbr
+
+== Quy Trình Xóa Release ==
+nd -> pm : Gửi yêu cầu xóa
+pm -> qlrl : Gửi yêu cầu xóa
+activate qlrl
+qlrl -> dbr : Xóa dữ liệu
+dbr --> qlrl : Xác nhận xóa thành công
+qlrl --> pm : Xác nhận xóa thành công
+deactivate qlrl
+pm --> nd : Thông báo xóa thành công
+@enduml

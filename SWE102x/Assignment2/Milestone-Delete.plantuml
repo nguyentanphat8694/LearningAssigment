@@ -1,0 +1,16 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nmilestone" as qlms
+database "Milestone Table" as dbm
+
+== Quy Trình Xóa Milestone ==
+nd -> pm : Gửi yêu cầu xóa
+pm -> qlms : Gửi yêu cầu xóa
+activate qlms
+qlms -> dbm : Xóa dữ liệu
+dbm --> qlms : Xác nhận xóa thành công
+qlms --> pm : Xác nhận xóa thành công
+deactivate qlms
+pm --> nd : Thông báo xóa thành công
+@enduml

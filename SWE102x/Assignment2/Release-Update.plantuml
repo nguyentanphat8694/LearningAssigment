@@ -1,0 +1,22 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nrelease" as qlrl
+database "Release Table" as dbr
+
+== Quy Trình Chỉnh sửa Release ==
+nd -> pm : Gửi yêu cầu chỉnh sửa
+pm -> qlrl : Gửi yêu cầu chỉnh sửa
+activate qlrl
+qlrl -> qlrl : Kiểm tra thông tin
+alt Chỉnh sửa thành công
+qlrl -> dbr : Chỉnh sửa dữ liệu
+dbr --> qlrl : Xác nhận chỉnh sửa thành công
+qlrl --> pm : Xác nhận chỉnh sửa thành công
+pm --> nd : Thông báo chỉnh sửa thành công
+else Chỉnh sửa thất bại
+qlrl --> pm : Tên đã tồn tại
+deactivate qlrl
+pm --> nd : Thông báo tên đã tồn tại
+end
+@enduml

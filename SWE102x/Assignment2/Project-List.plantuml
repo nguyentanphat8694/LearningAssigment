@@ -1,0 +1,16 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\ndự án" as qlda
+database "Project Table" as dbp
+
+== Quy Trình Lấy danh sách Dự án ==
+nd -> pm : Gửi ID phòng ban\nyêu cầu lấy danh sách
+pm -> qlda : Gửi ID phòng ban\nyêu cầu lấy danh sách
+activate qlda
+qlda -> dbp : Lấy dự án có ID khớp
+dbp --> qlda : Danh sách dự án có ID khớp
+qlda --> pm : Danh sách dự án
+deactivate qlda
+pm --> nd : Danh sách dự án
+@enduml

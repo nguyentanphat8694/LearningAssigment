@@ -1,0 +1,23 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nissue" as qlis
+participant "Quản lý\nngười dùng" as qlnd
+database "Issue Table" as dbr
+
+== Quy Trình Lấy thông tin Issue ==
+nd -> pm : Gửi yêu cầu lấy thông tin
+pm -> qlis : Gửi yêu cầu lấy thông tin
+activate qlis
+qlis -> qlnd : Lấy danh sách người dùng
+qlnd --> qlis : Danh sách người dùng
+qlis --> pm : Danh sách người dùng
+pm --> nd : Danh sách người dùng
+nd -> pm : Yêu cầu gán với Id người dùng đã chọn
+pm -> qlis : Yêu cầu gán với Id người dùng đã chọn
+qlis -> dbr : Cập nhật dữ liệu
+dbr --> qlis : Xác nhận cập nhật thành công
+qlis --> pm : Xác nhận cập nhật thành công
+deactivate qlis
+pm --> nd : Thông báo gán thành công
+@enduml

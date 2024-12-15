@@ -1,0 +1,16 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nmilestone" as qlml
+database "Milestone Table" as dbm
+
+== Quy Trình Lấy danh sách Milestone ==
+nd -> pm : Gửi ID dự án\nyêu cầu lấy danh sách
+pm -> qlml : Gửi ID dự án\nyêu cầu lấy danh sách
+activate qlml
+qlml -> dbm : Lấy milestone có ID khớp
+dbm --> qlml : Danh sách milestone có ID khớp
+qlml --> pm : Danh sách milestone
+deactivate qlml
+pm --> nd : Danh sách milestone
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nissue" as qlrl
+database "Issue Table" as dbr
+
+== Quy Trình Tạo Issue ==
+nd -> pm : Gửi yêu cầu tạo mới
+pm -> qlrl : Kiểm tra thông tin issue
+activate qlrl
+alt Tạo thành công
+qlrl --> pm : Tên chưa tồn tại
+pm -> qlrl : Yêu cầu tạo mới
+qlrl -> dbr : Lưu trữ thông tin
+dbr --> qlrl : Xác nhận lưu thành công
+qlrl --> pm : Xác nhận tạo thành công
+pm --> nd : Thông báo tạo thành công
+else Tạo thất bại
+qlrl --> pm : Tên đã tồn tại
+deactivate qlrl
+pm --> nd : Thông báo đã tồn tại
+end
+@enduml

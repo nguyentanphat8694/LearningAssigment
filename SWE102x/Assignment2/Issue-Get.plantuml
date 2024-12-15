@@ -1,0 +1,19 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nissue" as qlrl
+participant "Quản lý\ndự án" as qlpb
+database "Issue Table" as dbr
+
+== Quy Trình Lấy thông tin Issue ==
+nd -> pm : Gửi yêu cầu lấy thông tin
+pm -> qlrl : Gửi yêu cầu lấy thông tin
+activate qlrl
+qlrl -> dbr : Lấy thông tin dữ liệu
+dbr --> qlrl : Thông tin issue
+qlrl -> qlpb : Lấy thông tin dự án
+qlpb --> qlrl : Thông tin dự án
+qlrl --> pm : Thông tin issue
+deactivate qlrl
+pm --> nd : Thông tin issue
+@enduml

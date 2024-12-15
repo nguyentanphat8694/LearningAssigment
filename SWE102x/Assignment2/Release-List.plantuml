@@ -1,0 +1,16 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nrelease" as qlrl
+database "Release Table" as dbm
+
+== Quy Trình Lấy danh sách Release ==
+nd -> pm : Gửi ID dự án\nyêu cầu lấy danh sách
+pm -> qlrl : Gửi ID dự án\nyêu cầu lấy danh sách
+activate qlrl
+qlrl -> dbm : Lấy release có ID khớp
+dbm --> qlrl : Danh sách release có ID khớp
+qlrl --> pm : Danh sách release
+deactivate qlrl
+pm --> nd : Danh sách release
+@enduml

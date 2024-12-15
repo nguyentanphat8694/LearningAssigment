@@ -1,0 +1,19 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nmilestone" as qlms
+participant "Quản lý\ndự án" as qlpb
+database "Milestone Table" as dbm
+
+== Quy Trình Lấy thông tin Milestone ==
+nd -> pm : Gửi yêu cầu lấy thông tin
+pm -> qlms : Gửi yêu cầu lấy thông tin
+activate qlms
+qlms -> dbm : Lấy thông tin dữ liệu
+dbm --> qlms : Thông tin milestone
+qlms -> qlpb : Lấy thông tin dự án
+qlpb --> qlms : Thông tin dự án
+qlms --> pm : Thông tin milestone
+deactivate qlms
+pm --> nd : Thông tin milestone
+@enduml

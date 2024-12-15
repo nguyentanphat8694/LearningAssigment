@@ -19,6 +19,6 @@ pm --> nd : Thông báo chỉnh sửa thành công
 else Chỉnh sửa thất bại
 qlpb --> pm : Tên đã tồn tại
 deactivate qlpb
-pm --> nd : Thôn báo tên đã tồn tại
+pm --> nd : Thông báo tên đã tồn tại
 end
 @enduml

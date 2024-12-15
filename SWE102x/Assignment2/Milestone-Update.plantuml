@@ -1,0 +1,22 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nmilestone" as qlms
+database "Milestone Table" as dbm
+
+== Quy Trình Chỉnh sửa Milestone ==
+nd -> pm : Gửi yêu cầu chỉnh sửa
+pm -> qlms : Gửi yêu cầu chỉnh sửa
+activate qlms
+qlms -> qlms : Kiểm tra thông tin
+alt Chỉnh sửa thành công
+qlms -> dbm : Chỉnh sửa dữ liệu
+dbm --> qlms : Xác nhận chỉnh sửa thành công
+qlms --> pm : Xác nhận chỉnh sửa thành công
+pm --> nd : Thông báo chỉnh sửa thành công
+else Chỉnh sửa thất bại
+qlms --> pm : Tên đã tồn tại
+deactivate qlms
+pm --> nd : Thông báo tên đã tồn tại
+end
+@enduml

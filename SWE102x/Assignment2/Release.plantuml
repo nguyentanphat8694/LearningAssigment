@@ -5,25 +5,25 @@ abstract class BaseEntity {
   +updatedAt: DateTime
 }
 
-class Milestone {
+class Release {
   + name: String
   + code: String
   + description: String
   + startedDate: DateTime
-  + endDate: DateTime
+  + releaseDate: DateTime
   + projectId: Long
 
   + create(createdData: Milestone)
   + update(updateData: Milestone)
   + delete(id: Long)
-  + getMilestoneInfo()
+  + getReleaseInfo()
 }
 class Project {
   +name: String
   +code: String
   +description: String
 }
-BaseEntity <|-- Milestone
+BaseEntity <|-- Release
 BaseEntity <|-- Project
-Milestone "0..*" -- "1" Project : belongs to
+Release "0..*" -- "1" Project : belongs to
 @enduml

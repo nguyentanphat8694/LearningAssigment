@@ -1,0 +1,19 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nrelease" as qlrl
+participant "Quản lý\ndự án" as qlpb
+database "Release Table" as dbr
+
+== Quy Trình Lấy thông tin Release ==
+nd -> pm : Gửi yêu cầu lấy thông tin
+pm -> qlrl : Gửi yêu cầu lấy thông tin
+activate qlrl
+qlrl -> dbr : Lấy thông tin dữ liệu
+dbr --> qlrl : Thông tin release
+qlrl -> qlpb : Lấy thông tin dự án
+qlpb --> qlrl : Thông tin dự án
+qlrl --> pm : Thông tin release
+deactivate qlrl
+pm --> nd : Thông tin release
+@enduml

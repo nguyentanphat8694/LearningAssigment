@@ -1,0 +1,16 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nissue" as qlrl
+database "Issue Table" as dbm
+
+== Quy Trình Lấy danh sách Issue ==
+nd -> pm : Gửi ID dự án\nyêu cầu lấy danh sách
+pm -> qlrl : Gửi ID dự án\nyêu cầu lấy danh sách
+activate qlrl
+qlrl -> dbm : Lấy issue có ID khớp
+dbm --> qlrl : Danh sách issue có ID khớp
+qlrl --> pm : Danh sách issue
+deactivate qlrl
+pm --> nd : Danh sách issue
+@enduml

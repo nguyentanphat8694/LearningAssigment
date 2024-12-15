@@ -4,26 +4,43 @@ abstract class BaseEntity {
   +createdAt: DateTime
   +updatedAt: DateTime
 }
-
-class Milestone {
+class Issue {
   + name: String
   + code: String
   + description: String
   + startedDate: DateTime
   + endDate: DateTime
   + projectId: Long
+  + userId: Long
+  + statusId: Long
 
   + create(createdData: Milestone)
   + update(updateData: Milestone)
   + delete(id: Long)
   + getMilestoneInfo()
+  + assign(userId: Long)
+  + updateStatus(statusId: Long)
+}
+class IssueStatus {
+  + name: String
+  + description: String
 }
 class Project {
   +name: String
   +code: String
   +description: String
 }
-BaseEntity <|-- Milestone
+class User {
+  +username: String
+  +email: String
+  +firstName: String
+  +lastName: String
+}
+BaseEntity <|-- Issue
+BaseEntity <|-- IssueStatus
 BaseEntity <|-- Project
-Milestone "0..*" -- "1" Project : belongs to
+BaseEntity <|-- User
+Issue "0..*" -- "1" Project : belongs to
+IssueStatus "1" -- "1" Issue
+User "1" -- "1" Issue
 @enduml
