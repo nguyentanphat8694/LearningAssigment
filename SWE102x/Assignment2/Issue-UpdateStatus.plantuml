@@ -1,0 +1,23 @@
+@startuml
+actor "Người dùng" as nd
+participant "Phần mềm" as pm
+participant "Quản lý\nissue" as qlis
+database "Issue Table" as dbr
+database "IssueStatus Table" as dbist
+
+== Quy Trình Cập nhật trạng thái Issue ==
+nd -> pm : Gửi yêu cầu lấy thông tin trạng thái
+pm -> qlis : Gửi yêu cầu lấy thông tin trạng thái
+activate qlis
+qlis -> dbist : Lấy danh sách trạng thái
+dbist --> qlis : Danh sách trạng thái
+qlis --> pm : Danh sách trạng thái
+pm --> nd : Danh sách trạng thái
+nd -> pm : Yêu cầu cập nhật với Id trạng thái đã chọn
+pm -> qlis : Yêu cầu cập nhật với Id trạng thái đã chọn
+qlis -> dbr : Cập nhật dữ liệu
+dbr --> qlis : Xác nhận cập nhật thành công
+qlis --> pm : Xác nhận cập nhật thành công
+deactivate qlis
+pm --> nd : Thông báo gán thành công
+@enduml

@@ -5,7 +5,7 @@ participant "Quản lý\nissue" as qlis
 participant "Quản lý\nngười dùng" as qlnd
 database "Issue Table" as dbr
 
-== Quy Trình Lấy thông tin Issue ==
+== Quy Trình gán Issue ==
 nd -> pm : Gửi yêu cầu lấy thông tin
 pm -> qlis : Gửi yêu cầu lấy thông tin
 activate qlis

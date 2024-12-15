@@ -13,8 +13,8 @@ class Release {
   + releaseDate: DateTime
   + projectId: Long
 
-  + create(createdData: Milestone)
-  + update(updateData: Milestone)
+  + create(createdData: Release)
+  + update(updateData: Release)
   + delete(id: Long)
   + getReleaseInfo()
 }

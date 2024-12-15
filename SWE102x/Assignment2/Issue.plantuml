@@ -14,8 +14,8 @@ class Issue {
   + userId: Long
   + statusId: Long
 
-  + create(createdData: Milestone)
-  + update(updateData: Milestone)
+  + create(createdData: Issue)
+  + update(updateData: Issue)
   + delete(id: Long)
   + getMilestoneInfo()
   + assign(userId: Long)
