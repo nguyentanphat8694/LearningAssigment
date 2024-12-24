@@ -1,0 +1,67 @@
+@startuml Component Diagram
+
+package "Client Side" {
+    [Web Browser] as WB
+    package "Frontend Components" {
+        [SPA (React 18)] as UI
+        [API Client (axios 1.7.9)] as AC
+    }
+}
+
+package "Server Side" {
+    package "Presentation Layer" {
+        [REST Controller] as RC
+    }
+
+    package "Business Layer" {
+        [User Service] as US
+        [Project Service] as PS
+        [Milestone Service] as MS
+        [Release Service] as RS
+        [Issue Service] as IS
+        [Department Service] as DS
+    }
+    
+    package "Data Access Layer" {
+        [Data Access Objects\n(Sping Data JPA)] as DAO
+        database "PostgreSQL" {
+            [User Data]
+            [Department Data]
+            [Project Data]
+            [Milestone Data]
+            [Release Data]
+            [Issue Data]
+        }
+    }
+}
+
+' Client-side connections
+WB --> UI
+UI <--> AC
+
+' API connections
+AC <--> RC : REST API
+RC <--> US
+RC <--> PS
+RC <--> MS
+RC <--> RS
+RC <--> IS
+RC <--> DS
+
+' Service to DAO connections
+PS --> DAO
+RS --> DAO
+MS --> DAO
+IS --> DAO
+US --> DAO
+DS --> DAO
+
+' DAO to database connections
+DAO --> [User Data]
+DAO --> [Department Data]
+DAO --> [Project Data]
+DAO --> [Milestone Data]
+DAO --> [Release Data]
+DAO --> [Issue Data]
+
+@enduml

@@ -1,0 +1,117 @@
+@startuml Create New Project Sequence
+actor "Project Manager" as PM
+participant "UI Component" as UI
+participant "Redux Store" as Redux
+participant "API Client" as API
+participant "Project Service" as PS
+participant "Auth Service" as AS
+participant "Data Access Layer" as DAL
+database "PostgreSQL" as DB
+database "Redis Cache" as Cache
+
+PM -> UI: Fill project details
+activate UI
+
+UI -> Redux: Dispatch create project action
+activate Redux
+
+Redux -> API: POST /api/projects
+activate API
+
+API -> AS: Validate token
+activate AS
+AS --> API: Token valid
+deactivate AS
+
+API -> PS: createProject(projectData)
+activate PS
+
+PS -> DAL: saveProject(projectData)
+activate DAL
+
+DAL -> DB: INSERT project
+activate DB
+DB --> DAL: Project created
+deactivate DB
+
+DAL -> Cache: Cache project data
+activate Cache
+Cache --> DAL: Cached
+deactivate Cache
+
+DAL --> PS: Project saved
+deactivate DAL
+
+PS --> API: Project details
+deactivate PS
+
+API --> Redux: Project created response
+deactivate API
+
+Redux --> UI: Update state
+deactivate Redux
+
+UI --> PM: Show success message
+deactivate UI
+
+@enduml
+
+@startuml Create New User Sequence
+actor "Admin" as ADMIN
+participant "UI Component" as UI
+participant "Redux Store" as Redux
+participant "API Client" as API
+participant "User Service" as US
+participant "Auth Service" as AS
+participant "Data Access Layer" as DAL
+database "PostgreSQL" as DB
+database "Redis Cache" as Cache
+
+ADMIN -> UI: Fill user details
+activate UI
+
+UI -> Redux: Dispatch create user action
+activate Redux
+
+Redux -> API: POST /api/users
+activate API
+
+API -> AS: Validate admin token
+activate AS
+AS --> API: Token valid
+deactivate AS
+
+API -> US: createUser(userData)
+activate US
+
+US -> US: Hash password
+
+US -> DAL: saveUser(userData)
+activate DAL
+
+DAL -> DB: INSERT user
+activate DB
+DB --> DAL: User created
+deactivate DB
+
+DAL -> Cache: Cache user data
+activate Cache
+Cache --> DAL: Cached
+deactivate Cache
+
+DAL --> US: User saved
+deactivate DAL
+
+US --> API: User details
+deactivate US
+
+API --> Redux: User created response
+deactivate API
+
+Redux --> UI: Update state
+deactivate Redux
+
+UI --> ADMIN: Show success message
+deactivate UI
+
+@enduml

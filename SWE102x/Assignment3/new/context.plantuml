@@ -1,0 +1,32 @@
+@startuml Client-Server Architecture
+
+class "Client" {
+    + Web Browser
+    + React UI Components
+    + Redux State Management
+    + API Client Library
+}
+
+class "Server" {
+    + REST/GraphQL API Endpoints
+    + Business Logic Layer
+    + Data Access Layer
+    + Security Layer
+}
+
+database "PostgreSQL" {
+    [User Data]
+    [Project Data]
+    [Issue Data]
+}
+
+Client -down-> Server : HTTP/HTTPS Requests
+Server -up-> Client : JSON/GraphQL Response
+Server -down-> Databases : CRUD Operations
+Databases -up-> Server : Data Response
+
+note right of Client : "Frontend Stack:\n- React\n- Redux\n- Material UI\n- Axios"
+note right of Server : "Backend Stack:\n- Spring Boot\n- Spring Security\n- Hibernate\n- GraphQL"
+note right of Databases : "Storage:\n- User Data\n- Project Data\n- Issues\n- Cache"
+
+@enduml
