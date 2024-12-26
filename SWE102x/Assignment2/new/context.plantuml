@@ -1,0 +1,57 @@
+@startuml
+
+actor User as user
+
+package "Client Side" {
+  node "Web Browser" as webBrowser
+  node "SPA (React 18)" as spa
+  node "API Client (axios 1.7.9)" as apiClient
+}
+
+package "Server Side" {
+  node "REST Controller" as restController
+  package "Business Layer" {
+    node "User Service" as userService
+    node "Project Service" as projectService
+    node "Milestone Service" as milestoneService
+    node "Release Service" as releaseService
+    node "Issue Service" as issueService
+    node "Department Service" as departmentService
+  }
+
+  package "Data Access Layer" {
+    node "Data Access Objects (Spring Data JPA)" as dao
+  }
+
+  database "PostgreSQL" as postgres {
+    node "User Data"
+    node "Department Data"
+    node "Project Data"
+    node "Milestone Data"
+    node "Release Data"
+    node "Issue Data"
+  }
+}
+
+user --> webBrowser : "Tương tác"
+webBrowser --> spa : "Hiển thị"
+spa --> apiClient : "Gửi\nyêu cầu"
+apiClient --> spa : "Nhận\nkết quả"
+apiClient --> restController : "Gửi\nrequest\nREST API"
+restController --> apiClient : "Nhận\nresponse\nREST API"
+restController <--> userService : "Xử lý tác vụ user"
+restController <--> projectService : "Xử lý tác vụ project"
+restController <--> milestoneService : "Xử lý tác vụ"
+restController <--> releaseService : "Xử lý tác vụ release"
+restController <--> issueService : "Xử lý tác vụ issue"
+restController <--> departmentService : "Xử lý tác vụ department"
+
+userService --> dao : "Truy cập"
+projectService --> dao : "Truy cập"
+milestoneService --> dao : "Truy cập"
+releaseService --> dao : "Truy cập"
+issueService --> dao : "Truy cập"
+departmentService --> dao : "Truy cập"
+
+dao --> postgres : "Queries"
+@enduml
