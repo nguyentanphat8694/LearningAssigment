@@ -1,0 +1,87 @@
+@startuml
+actor Admin
+box "Client-side" #LightBlue
+participant "React App" as Client
+participant "Department Store" as DeptStore
+participant "API Client" as API
+end box
+
+box "Server-side" #LightYellow
+participant "DepartmentController" as DeptCtrl
+participant "DepartmentService" as DeptSvc
+participant "UserService" as UserSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+end box
+
+Admin -> Client: Tạo phòng ban mới
+Client -> DeptStore: dispatch(createDepartment)
+
+activate DeptStore
+DeptStore -> API: createDepartment(data)
+
+activate API
+API -> API: setAuthHeader()
+API -> DeptCtrl: POST /api/departments
+
+activate DeptCtrl
+DeptCtrl -> DeptSvc: createDepartment()
+DeptSvc -> DB: save()
+DB --> DeptSvc: Department data
+
+DeptCtrl -> UserSvc: assignManager()
+UserSvc -> DB: updateUserRole()
+DB --> UserSvc: Update status
+
+DeptSvc -> NotifSvc: notifyMembers()
+NotifSvc -> NotifSvc: sendNotification()
+
+DeptCtrl --> API: 201 Created + department data
+deactivate DeptCtrl
+
+API -> API: transformResponse()
+API --> DeptStore: Success response
+
+DeptStore -> DeptStore: updateDepartments()
+DeptStore --> Client: Update department state
+deactivate API
+
+Client -> Client: Navigate to department
+Client --> Admin: Show success message
+deactivate DeptStore
+
+Admin -> Client: Thêm thành viên
+Client -> DeptStore: dispatch(addMember)
+
+activate DeptStore
+DeptStore -> API: addDepartmentMember(deptId, userId)
+
+activate API
+API -> DeptCtrl: PUT /api/departments/{id}/members
+
+activate DeptCtrl
+DeptCtrl -> DeptSvc: addMember()
+DeptSvc -> UserSvc: validateUser()
+UserSvc -> DB: checkUserExists()
+DB --> UserSvc: User status
+
+DeptSvc -> DB: updateDepartmentMembers()
+DB --> DeptSvc: Update status
+
+DeptSvc -> NotifSvc: notifyNewMember()
+NotifSvc -> NotifSvc: sendNotification()
+
+DeptCtrl --> API: 200 OK + updated department
+deactivate DeptCtrl
+
+API -> API: transformResponse()
+API --> DeptStore: Success response
+
+DeptStore -> DeptStore: updateDepartment()
+DeptStore --> Client: Update department state
+deactivate API
+
+Client --> Admin: Show member added
+deactivate DeptStore
+
+@enduml 

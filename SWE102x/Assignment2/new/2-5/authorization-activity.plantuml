@@ -1,0 +1,41 @@
+@startuml
+|User|
+start
+:Yêu cầu truy cập;
+
+|System|
+:Kiểm tra đăng nhập;
+
+if (Đã đăng nhập?) then (yes)
+  :Lấy thông tin user;
+  :Kiểm tra vai trò;
+  
+  fork
+    :Kiểm tra quyền trực tiếp;
+  fork again
+    :Kiểm tra quyền theo nhóm;
+  end fork
+  
+  :Tổng hợp quyền;
+  
+  if (Có quyền?) then (yes)
+    :Ghi log truy cập;
+    :Cho phép truy cập;
+  else (no)
+    :Ghi log từ chối;
+    :Thông báo không có quyền;
+  endif
+  
+else (no)
+  :Chuyển đến trang đăng nhập;
+endif
+
+|User|
+if (Được phép?) then (yes)
+  :Truy cập tài nguyên;
+else (no)
+  :Nhận thông báo lỗi;
+endif
+
+stop
+@enduml 

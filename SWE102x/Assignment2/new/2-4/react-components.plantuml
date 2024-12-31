@@ -1,0 +1,52 @@
+@startuml
+package "React Components" {
+  package "Common" {
+    class Layout {
+      + header: Component
+      + sidebar: Component
+      + content: Component
+      + footer: Component
+    }
+
+    class Form {
+      + fields: Array<Field>
+      + validation: Object
+      + onSubmit(): void
+    }
+
+    class Table {
+      + columns: Array<Column>
+      + data: Array<Object>
+      + pagination: Object
+      + sorting: Object
+    }
+  }
+
+  package "Features" {
+    class ProjectList {
+      + projects: Array<Project>
+      + filter: Object
+      + sort: Object
+      + onCreateProject(): void
+    }
+
+    class IssueBoard {
+      + issues: Array<Issue>
+      + lanes: Array<Lane>
+      + onDragIssue(): void
+      + onCreateIssue(): void
+    }
+
+    class UserManagement {
+      + users: Array<User>
+      + roles: Array<Role>
+      + onUpdateUser(): void
+      + onDeleteUser(): void
+    }
+  }
+}
+
+ProjectList --|> Layout
+IssueBoard --|> Layout
+UserManagement --|> Layout
+@enduml 

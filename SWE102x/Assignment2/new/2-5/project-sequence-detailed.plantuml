@@ -1,0 +1,54 @@
+@startuml
+actor Manager
+box "Client-side" #LightBlue
+participant "React App" as Client
+participant "Project Store" as ProjStore
+participant "API Client" as API
+end box
+
+box "Server-side" #LightYellow
+participant "ProjectController" as ProjCtrl
+participant "ProjectService" as ProjSvc
+participant "DepartmentService" as DeptSvc
+database "Database" as DB
+end box
+
+Manager -> Client: Create new project
+Client -> ProjStore: dispatch(createProject)
+
+activate ProjStore
+ProjStore -> API: createProject(data)
+
+activate API
+API -> API: setAuthHeader()
+API -> ProjCtrl: POST /api/projects
+
+activate ProjCtrl
+ProjCtrl -> DeptSvc: validateDepartment()
+DeptSvc -> DB: checkDepartmentExists()
+DB --> DeptSvc: Department status
+DeptSvc --> ProjCtrl: Validation result
+
+ProjCtrl -> ProjSvc: createProject()
+ProjSvc -> DB: save()
+DB --> ProjSvc: Project data
+
+ProjCtrl -> ProjSvc: assignMembers()
+ProjSvc -> DB: updateProjectMembers()
+DB --> ProjSvc: Update status
+
+ProjCtrl --> API: 201 Created + project data
+deactivate ProjCtrl
+
+API -> API: transformResponse()
+API --> ProjStore: Success response
+
+ProjStore -> ProjStore: updateProjects()
+ProjStore --> Client: Update project state
+deactivate API
+
+Client -> Client: Navigate to project
+Client --> Manager: Show success message
+deactivate ProjStore
+
+@enduml 

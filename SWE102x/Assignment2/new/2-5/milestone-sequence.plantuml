@@ -1,0 +1,47 @@
+@startuml
+actor ProjectManager
+participant "React App" as Client
+participant "MilestoneController" as MileCtrl
+participant "MilestoneService" as MileSvc
+participant "ProjectService" as ProjSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+
+ProjectManager -> Client: Tạo milestone mới
+Client -> MileCtrl: POST /api/milestones
+
+activate MileCtrl
+MileCtrl -> ProjSvc: validateProject()
+ProjSvc -> DB: checkProjectExists()
+DB --> ProjSvc: Project status
+
+MileCtrl -> MileSvc: createMilestone()
+MileSvc -> DB: save()
+DB --> MileSvc: Milestone data
+
+MileSvc -> NotifSvc: notifyProjectTeam()
+NotifSvc -> NotifSvc: sendNotification()
+
+MileSvc --> MileCtrl: Created milestone
+MileCtrl --> Client: Milestone details
+deactivate MileCtrl
+
+Client --> ProjectManager: Show success message
+
+ProjectManager -> Client: Cập nhật tiến độ
+Client -> MileCtrl: PUT /api/milestones/{id}/progress
+
+activate MileCtrl
+MileCtrl -> MileSvc: updateProgress()
+MileSvc -> DB: updateMilestoneProgress()
+DB --> MileSvc: Update status
+
+MileSvc -> NotifSvc: notifyProgressUpdate()
+NotifSvc -> NotifSvc: sendNotification()
+
+MileSvc --> MileCtrl: Updated milestone
+MileCtrl --> Client: Milestone details
+deactivate MileCtrl
+
+Client --> ProjectManager: Show progress updated
+@enduml 

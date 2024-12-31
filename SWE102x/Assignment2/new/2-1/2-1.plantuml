@@ -1,0 +1,64 @@
+@startuml
+package "Client Side" {
+  package "Core Module" {
+    [State Management]
+    [Routing Module]
+    [API Integration]
+  }
+  
+  package "Feature Modules" {
+    [Authentication Module]
+    [Project Management]
+    [Issue Tracking]
+    [Release Management]
+  }
+  
+  package "Shared Module" {
+    [UI Components]
+    [Utilities]
+  }
+}
+
+package "Server Side" {
+  package "API Layer" {
+    [Controllers]
+    [DTOs]
+  }
+  
+  package "Business Layer" {
+    [Services]
+    [Domain Models]
+  }
+  
+  package "Data Access Layer" {
+    [Repositories]
+    [Data Models]
+  }
+  
+  package "Cross-cutting Concerns" {
+    [Security]
+    [Logging & Monitoring]
+    [Configuration]
+  }
+}
+
+' Client Side relationships
+[Feature Modules] ..> [Core Module]
+[Feature Modules] ..> [Shared Module]
+[Core Module] ..> [Shared Module]
+
+' Server Side relationships
+[Controllers] ..> [Services]
+[Services] ..> [Domain Models]
+[Services] ..> [Repositories]
+[Repositories] ..> [Data Models]
+
+' Cross-cutting concerns relationships
+[Controllers] ..> [Security]
+[Services] ..> [Logging & Monitoring]
+[Repositories] ..> [Configuration]
+
+' Client-Server communication
+[API Integration] ..> [Controllers] : REST API
+
+@enduml 

@@ -1,0 +1,29 @@
+@startuml
+package "Release Service" {
+  interface ReleaseService {
+    +findById(id: Long): Release
+    +create(release: ReleaseDTO): Release
+    +update(id: Long, release: ReleaseDTO): Release
+    +delete(id: Long): void
+    +publish(id: Long): void
+    +rollback(id: Long): void
+  }
+
+  class ReleaseServiceImpl {
+    -releaseRepository: ReleaseRepository
+    -projectService: ProjectService
+    -notificationService: NotificationService
+    +validateReleaseAccess(releaseId: Long, userId: Long): boolean
+    -notifyReleaseUpdate(release: Release): void
+  }
+
+  class ReleaseEventHandler {
+    +onReleaseCreated(release: Release): void
+    +onReleasePublished(release: Release): void
+    +onReleaseRollback(release: Release): void
+  }
+
+  ReleaseService <|.. ReleaseServiceImpl
+  ReleaseServiceImpl --> ReleaseEventHandler
+}
+@enduml 

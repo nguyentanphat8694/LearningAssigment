@@ -1,0 +1,41 @@
+@startuml
+package "REST API Endpoints" {
+  class AuthController {
+    + login(LoginDTO): TokenResponse
+    + logout(): void
+    + refreshToken(String): TokenResponse
+    + changePassword(PasswordDTO): void
+  }
+
+  class UserController {
+    + getUsers(): List<UserDTO>
+    + getUser(Long): UserDTO
+    + createUser(UserDTO): UserDTO
+    + updateUser(Long, UserDTO): UserDTO
+    + deleteUser(Long): void
+  }
+
+  class ProjectController {
+    + getProjects(): List<ProjectDTO>
+    + getProject(Long): ProjectDTO
+    + createProject(ProjectDTO): ProjectDTO
+    + updateProject(Long, ProjectDTO): ProjectDTO
+    + deleteProject(Long): void
+    + addMember(Long, Long): void
+    + removeMember(Long, Long): void
+  }
+
+  class IssueController {
+    + getIssues(): List<IssueDTO>
+    + getIssue(Long): IssueDTO
+    + createIssue(IssueDTO): IssueDTO
+    + updateIssue(Long, IssueDTO): IssueDTO
+    + deleteIssue(Long): void
+    + assignIssue(Long, Long): void
+    + updateStatus(Long, Status): void
+  }
+}
+
+note "All endpoints require authentication" as N1
+AuthController .. N1
+@enduml 

@@ -1,0 +1,29 @@
+@startuml
+package "Milestone Service" {
+  interface MilestoneService {
+    +findById(id: Long): Milestone
+    +create(milestone: MilestoneDTO): Milestone
+    +update(id: Long, milestone: MilestoneDTO): Milestone
+    +delete(id: Long): void
+    +updateProgress(id: Long, progress: Float): void
+    +complete(id: Long): void
+  }
+
+  class MilestoneServiceImpl {
+    -milestoneRepository: MilestoneRepository
+    -projectService: ProjectService
+    -notificationService: NotificationService
+    +validateMilestoneAccess(milestoneId: Long, userId: Long): boolean
+    -notifyMilestoneUpdate(milestone: Milestone): void
+  }
+
+  class MilestoneEventHandler {
+    +onMilestoneCreated(milestone: Milestone): void
+    +onMilestoneUpdated(milestone: Milestone): void
+    +onMilestoneCompleted(milestone: Milestone): void
+  }
+
+  MilestoneService <|.. MilestoneServiceImpl
+  MilestoneServiceImpl --> MilestoneEventHandler
+}
+@enduml 

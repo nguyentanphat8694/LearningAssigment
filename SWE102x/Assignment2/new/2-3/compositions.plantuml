@@ -1,0 +1,49 @@
+@startuml
+package "Project Composition" {
+  class Project {
+    -id: Long
+    -name: String
+  }
+
+  class Milestone {
+    -id: Long
+    -name: String
+  }
+
+  class Release {
+    -id: Long
+    -version: String
+  }
+
+  class Issue {
+    -id: Long
+    -title: String
+  }
+
+  Project *-- "*" Milestone : contains >
+  Project *-- "*" Release : contains >
+  Project *-- "*" Issue : contains >
+}
+
+package "Department Aggregation" {
+  class Department {
+    -id: Long
+    -name: String
+  }
+
+  class User {
+    -id: Long
+    -username: String
+  }
+
+  Department o-- "*" User : has >
+  Department o-- "*" Project : manages >
+}
+
+note "Composition (strong)" as N1
+note "Aggregation (weak)" as N2
+
+Project .. N1
+Department .. N2
+
+@enduml 

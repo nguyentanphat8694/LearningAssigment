@@ -1,0 +1,38 @@
+@startuml
+package "Custom Repositories" {
+  interface UserRepository {
+    +findByUsername(username: String): Optional<User>
+    +findByEmail(email: String): Optional<User>
+    +findByDepartment(departmentId: Long): List<User>
+    +searchUsers(criteria: SearchCriteria): List<User>
+  }
+
+  interface ProjectRepository {
+    +findByDepartment(departmentId: Long): List<Project>
+    +findByMember(userId: Long): List<Project>
+    +findActive(): List<Project>
+    +searchProjects(criteria: SearchCriteria): List<Project>
+  }
+
+  interface IssueRepository {
+    +findByProject(projectId: Long): List<Issue>
+    +findByAssignee(userId: Long): List<Issue>
+    +findByStatus(status: IssueStatus): List<Issue>
+    +searchIssues(criteria: SearchCriteria): List<Issue>
+  }
+
+  class SearchCriteria {
+    -filters: Map<String, Object>
+    -sort: Sort
+    -page: Pageable
+  }
+
+  UserRepository --|> BaseRepository
+  ProjectRepository --|> BaseRepository
+  IssueRepository --|> BaseRepository
+  
+  UserRepository ..> SearchCriteria
+  ProjectRepository ..> SearchCriteria
+  IssueRepository ..> SearchCriteria
+}
+@enduml 

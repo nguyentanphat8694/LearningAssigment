@@ -1,0 +1,59 @@
+@startuml
+package "Request DTOs" {
+  class UserCreateDTO {
+    +username: String
+    +email: String
+    +password: String
+    +fullName: String
+    +role: UserRole
+  }
+
+  class ProjectCreateDTO {
+    +name: String
+    +description: String
+    +departmentId: Long
+    +startDate: Date
+    +endDate: Date
+  }
+
+  class IssueCreateDTO {
+    +title: String
+    +description: String
+    +type: IssueType
+    +priority: Priority
+    +projectId: Long
+    +assigneeId: Long
+  }
+}
+
+package "Response DTOs" {
+  class UserDTO {
+    +id: Long
+    +username: String
+    +email: String
+    +fullName: String
+    +role: UserRole
+    +status: UserStatus
+  }
+
+  class ProjectDTO {
+    +id: Long
+    +name: String
+    +description: String
+    +department: DepartmentDTO
+    +status: ProjectStatus
+    +members: List<UserDTO>
+  }
+
+  class IssueDTO {
+    +id: Long
+    +title: String
+    +description: String
+    +type: IssueType
+    +status: IssueStatus
+    +assignee: UserDTO
+    +project: ProjectDTO
+  }
+}
+
+@enduml 

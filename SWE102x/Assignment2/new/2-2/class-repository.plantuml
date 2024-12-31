@@ -1,0 +1,30 @@
+@startuml
+interface UserRepository {
+  +findByUsername(username: String): User
+  +findByEmail(email: String): User
+  +findByDepartment(deptId: Long): List<User>
+}
+
+interface ProjectRepository {
+  +findByDepartment(deptId: Long): List<Project>
+  +findByMember(userId: Long): List<Project>
+  +findActive(): List<Project>
+}
+
+interface IssueRepository {
+  +findByProject(projectId: Long): List<Issue>
+  +findByAssignee(userId: Long): List<Issue>
+  +findByStatus(status: IssueStatus): List<Issue>
+}
+
+interface DepartmentRepository {
+  +findByManager(userId: Long): List<Department>
+  +findActive(): List<Department>
+}
+
+UserRepository --|> JpaRepository
+ProjectRepository --|> JpaRepository
+IssueRepository --|> JpaRepository
+DepartmentRepository --|> JpaRepository
+
+@enduml 

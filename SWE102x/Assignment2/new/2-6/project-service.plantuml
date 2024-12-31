@@ -1,0 +1,29 @@
+@startuml
+package "Project Service" {
+  interface ProjectService {
+    +findById(id: Long): Project
+    +create(project: ProjectDTO): Project
+    +update(id: Long, project: ProjectDTO): Project
+    +delete(id: Long): void
+    +addMember(projectId: Long, userId: Long): void
+    +removeMember(projectId: Long, userId: Long): void
+  }
+
+  class ProjectServiceImpl {
+    -projectRepository: ProjectRepository
+    -userService: UserService
+    -departmentService: DepartmentService
+    +validateProjectAccess(projectId: Long, userId: Long): boolean
+    -notifyProjectChanges(project: Project): void
+  }
+
+  class ProjectEventHandler {
+    +onProjectCreated(project: Project): void
+    +onProjectUpdated(project: Project): void
+    +onMemberAdded(project: Project, user: User): void
+  }
+
+  ProjectService <|.. ProjectServiceImpl
+  ProjectServiceImpl --> ProjectEventHandler
+}
+@enduml 

@@ -1,0 +1,58 @@
+@startuml
+package "Project Domain" {
+  class Project {
+    -id: Long
+    -name: String
+    -description: String
+    -startDate: Date
+    -endDate: Date
+    -status: ProjectStatus
+    -department: Department
+    -manager: User
+    -members: Set<User>
+    -milestones: List<Milestone>
+    -releases: List<Release>
+    +addMember(user: User): void
+    +removeMember(user: User): void
+    +updateStatus(status: ProjectStatus): void
+    +calculateProgress(): float
+  }
+
+  class Milestone {
+    -id: Long
+    -name: String
+    -description: String
+    -startDate: Date
+    -endDate: Date
+    -status: MilestoneStatus
+    -deliverables: List<String>
+    -issues: Set<Issue>
+    +updateProgress(): void
+    +isCompleted(): boolean
+  }
+
+  class Release {
+    -id: Long
+    -version: String
+    -notes: String
+    -releaseDate: Date
+    -status: ReleaseStatus
+    -features: Set<Issue>
+    -bugs: Set<Issue>
+    +publish(): void
+    +rollback(): void
+  }
+
+  enum ProjectStatus {
+    PLANNING
+    ACTIVE
+    ON_HOLD
+    COMPLETED
+    CANCELLED
+  }
+
+  Project --> ProjectStatus
+  Project "1" *-- "*" Milestone
+  Project "1" *-- "*" Release
+}
+@enduml 

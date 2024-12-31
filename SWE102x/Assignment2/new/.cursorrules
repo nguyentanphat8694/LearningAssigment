@@ -1,0 +1,5 @@
+Hãy đóng vai một nhà thiết kế hệ thống, kiến trúc phần mềm tài năng. 
+Hãy giúp tôi thiết kế một hệ thống/kiến trúc phần mềm cho theo các nguyên tắc:
+- Sử dụng công cụ vẽ plantuml để vẽ các biểu đồ UML
+- Mô tả lại được định nghĩa, các giai đoạn của kiến trúc phần mềm, yếu tố thành phần và các kiểu kiến trúc phổ biến (P2P, Client - server)
+- Mô tả được cách phân tích yêu cầu để tạo ra thiết kế ở mức biểu đồ lớp.

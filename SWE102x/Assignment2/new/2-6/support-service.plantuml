@@ -1,0 +1,38 @@
+@startuml
+package "Support Services" {
+  interface NotificationService {
+    +sendNotification(user: User, message: String): void
+    +sendEmail(to: String, subject: String, content: String): void
+  }
+
+  interface FileService {
+    +uploadFile(file: File): String
+    +downloadFile(fileId: String): File
+    +deleteFile(fileId: String): void
+  }
+
+  interface AuditService {
+    +logAction(user: User, action: String, details: Map): void
+    +getAuditLog(filters: Map): List<AuditLog>
+  }
+
+  class NotificationServiceImpl {
+    -emailSender: EmailSender
+    -pushNotificationSender: PushNotificationSender
+  }
+
+  class FileServiceImpl {
+    -storageProvider: StorageProvider
+    -fileValidator: FileValidator
+  }
+
+  class AuditServiceImpl {
+    -auditRepository: AuditRepository
+    -userService: UserService
+  }
+
+  NotificationService <|.. NotificationServiceImpl
+  FileService <|.. FileServiceImpl
+  AuditService <|.. AuditServiceImpl
+}
+@enduml 

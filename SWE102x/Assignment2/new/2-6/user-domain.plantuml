@@ -1,0 +1,52 @@
+@startuml
+package "User Domain" {
+  class User {
+    -id: Long
+    -username: String
+    -email: String
+    -password: String
+    -fullName: String
+    -phone: String
+    -status: UserStatus
+    -role: UserRole
+    -department: Department
+    -createdAt: DateTime
+    -updatedAt: DateTime
+    +validatePassword(password: String): boolean
+    +updateProfile(profile: UserProfile): void
+    +changeRole(role: UserRole): void
+  }
+
+  class UserProfile {
+    -avatar: String
+    -bio: String
+    -skills: Set<String>
+    -timezone: String
+    -preferences: Map<String, Object>
+  }
+
+  enum UserStatus {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+    DELETED
+  }
+
+  enum UserRole {
+    ADMIN
+    MANAGER
+    MEMBER
+  }
+
+  class UserPermission {
+    -resource: String
+    -action: String
+    -conditions: Map<String, Object>
+  }
+
+  User --> UserStatus
+  User --> UserRole
+  User "1" *-- "1" UserProfile
+  UserRole "1" *-- "*" UserPermission
+}
+@enduml 

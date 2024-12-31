@@ -1,0 +1,77 @@
+@startuml
+package "Project Structure" {
+  package "Frontend" {
+    folder "src" {
+      folder "components" {
+        folder "layout" {
+          [Header.tsx]
+          [Sidebar.tsx]
+          [Footer.tsx]
+        }
+        folder "features" {
+          [ProjectList.tsx]
+          [IssueBoard.tsx]
+          [UserProfile.tsx]
+        }
+        folder "shared" {
+          [Button.tsx]
+          [Table.tsx]
+          [Modal.tsx]
+        }
+      }
+      folder "services" {
+        folder "api" {
+          [apiClient.ts]
+          [endpoints.ts]
+        }
+        folder "auth" {
+          [authService.ts]
+          [tokenStorage.ts]
+        }
+      }
+      folder "store" {
+        folder "actions" {
+          [projectActions.ts]
+          [issueActions.ts]
+        }
+        folder "reducers" {
+          [projectReducer.ts]
+          [issueReducer.ts]
+        }
+      }
+    }
+  }
+
+  package "Backend" {
+    folder "src/main/java" {
+      folder "controller" {
+        [UserController.java]
+        [ProjectController.java]
+        [IssueController.java]
+      }
+      folder "service" {
+        [UserService.java]
+        [ProjectService.java]
+        [IssueService.java]
+      }
+      folder "repository" {
+        [UserRepository.java]
+        [ProjectRepository.java]
+        [IssueRepository.java]
+      }
+      folder "model" {
+        folder "domain" {
+          [User.java]
+          [Project.java]
+          [Issue.java]
+        }
+        folder "dto" {
+          [UserDTO.java]
+          [ProjectDTO.java]
+          [IssueDTO.java]
+        }
+      }
+    }
+  }
+}
+@enduml 

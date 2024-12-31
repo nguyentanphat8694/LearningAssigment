@@ -1,0 +1,115 @@
+@startuml
+actor ProjectManager
+box "Client-side" #LightBlue
+participant "React App" as Client
+participant "Release Store" as ReleaseStore
+participant "API Client" as API
+end box
+
+box "Server-side" #LightYellow
+participant "ReleaseController" as ReleaseCtrl
+participant "ReleaseService" as ReleaseSvc
+participant "ProjectService" as ProjSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+end box
+
+ProjectManager -> Client: Tạo release mới
+Client -> ReleaseStore: dispatch(createRelease)
+
+activate ReleaseStore
+ReleaseStore -> API: createRelease(data)
+
+activate API
+API -> API: setAuthHeader()
+API -> ReleaseCtrl: POST /api/releases
+
+activate ReleaseCtrl
+ReleaseCtrl -> ProjSvc: validateProject()
+ProjSvc -> DB: checkProjectExists()
+DB --> ProjSvc: Project status
+
+ReleaseCtrl -> ReleaseSvc: createRelease()
+ReleaseSvc -> DB: save()
+DB --> ReleaseSvc: Release data
+
+ReleaseSvc -> NotifSvc: notifyProjectTeam()
+NotifSvc -> NotifSvc: sendNotification()
+
+ReleaseCtrl --> API: 201 Created + release data
+deactivate ReleaseCtrl
+
+API -> API: transformResponse()
+API --> ReleaseStore: Success response
+
+ReleaseStore -> ReleaseStore: updateReleases()
+ReleaseStore --> Client: Update release state
+deactivate API
+
+Client -> Client: Navigate to release
+Client --> ProjectManager: Show success message
+deactivate ReleaseStore
+
+ProjectManager -> Client: Publish release
+Client -> ReleaseStore: dispatch(publishRelease)
+
+activate ReleaseStore
+ReleaseStore -> API: publishRelease(id)
+
+activate API
+API -> ReleaseCtrl: PUT /api/releases/{id}/publish
+
+activate ReleaseCtrl
+ReleaseCtrl -> ReleaseSvc: publishRelease()
+ReleaseSvc -> DB: updateReleaseStatus()
+DB --> ReleaseSvc: Update status
+
+ReleaseSvc -> NotifSvc: notifyReleasePublished()
+NotifSvc -> NotifSvc: sendNotification()
+
+ReleaseCtrl --> API: 200 OK + published release
+deactivate ReleaseCtrl
+
+API -> API: transformResponse()
+API --> ReleaseStore: Success response
+
+ReleaseStore -> ReleaseStore: updateRelease()
+ReleaseStore --> Client: Update release state
+deactivate API
+
+Client --> ProjectManager: Show release published
+deactivate ReleaseStore
+
+alt Release fails
+    ProjectManager -> Client: Rollback release
+    Client -> ReleaseStore: dispatch(rollbackRelease)
+    
+    activate ReleaseStore
+    ReleaseStore -> API: rollbackRelease(id)
+    
+    activate API
+    API -> ReleaseCtrl: PUT /api/releases/{id}/rollback
+    
+    activate ReleaseCtrl
+    ReleaseCtrl -> ReleaseSvc: rollbackRelease()
+    ReleaseSvc -> DB: revertReleaseStatus()
+    DB --> ReleaseSvc: Rollback status
+    
+    ReleaseSvc -> NotifSvc: notifyReleaseRollback()
+    NotifSvc -> NotifSvc: sendNotification()
+    
+    ReleaseCtrl --> API: 200 OK + rolled back release
+    deactivate ReleaseCtrl
+    
+    API -> API: transformResponse()
+    API --> ReleaseStore: Success response
+    
+    ReleaseStore -> ReleaseStore: updateRelease()
+    ReleaseStore --> Client: Update release state
+    deactivate API
+    
+    Client --> ProjectManager: Show rollback complete
+    deactivate ReleaseStore
+end
+
+@enduml 

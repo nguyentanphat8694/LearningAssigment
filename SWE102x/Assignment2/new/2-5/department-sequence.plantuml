@@ -1,0 +1,51 @@
+@startuml
+actor Admin
+participant "React App" as Client
+participant "DepartmentController" as DeptCtrl
+participant "DepartmentService" as DeptSvc
+participant "UserService" as UserSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+
+Admin -> Client: Tạo phòng ban mới
+Client -> DeptCtrl: POST /api/departments
+
+activate DeptCtrl
+DeptCtrl -> DeptSvc: createDepartment()
+DeptSvc -> DB: save()
+DB --> DeptSvc: Department data
+
+DeptCtrl -> UserSvc: assignManager()
+UserSvc -> DB: updateUserRole()
+DB --> UserSvc: Update status
+
+DeptSvc -> NotifSvc: notifyMembers()
+NotifSvc -> NotifSvc: sendNotification()
+
+DeptSvc --> DeptCtrl: Created department
+DeptCtrl --> Client: Department details
+deactivate DeptCtrl
+
+Client --> Admin: Show success message
+
+Admin -> Client: Thêm thành viên
+Client -> DeptCtrl: PUT /api/departments/{id}/members
+
+activate DeptCtrl
+DeptCtrl -> DeptSvc: addMember()
+DeptSvc -> UserSvc: validateUser()
+UserSvc -> DB: checkUserExists()
+DB --> UserSvc: User status
+
+DeptSvc -> DB: updateDepartmentMembers()
+DB --> DeptSvc: Update status
+
+DeptSvc -> NotifSvc: notifyNewMember()
+NotifSvc -> NotifSvc: sendNotification()
+
+DeptSvc --> DeptCtrl: Updated department
+DeptCtrl --> Client: Department details
+deactivate DeptCtrl
+
+Client --> Admin: Show member added
+@enduml 

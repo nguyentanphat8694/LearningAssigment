@@ -1,0 +1,40 @@
+@startuml
+interface UserService {
+  +findById(id: Long): User
+  +create(user: UserDTO): User
+  +update(user: UserDTO): User
+  +delete(id: Long): void
+  +assignToProject(userId: Long, projectId: Long)
+}
+
+interface ProjectService {
+  +findById(id: Long): Project
+  +create(project: ProjectDTO): Project
+  +update(project: ProjectDTO): Project
+  +delete(id: Long): void
+  +addMember(projectId: Long, userId: Long)
+}
+
+interface IssueService {
+  +findById(id: Long): Issue
+  +create(issue: IssueDTO): Issue
+  +update(issue: IssueDTO): Issue
+  +delete(id: Long): void
+  +assignTo(issueId: Long, userId: Long)
+  +updateStatus(issueId: Long, status: IssueStatus)
+}
+
+interface DepartmentService {
+  +findById(id: Long): Department
+  +create(dept: DepartmentDTO): Department
+  +update(dept: DepartmentDTO): Department
+  +delete(id: Long): void
+  +addMember(deptId: Long, userId: Long)
+}
+
+class UserServiceImpl implements UserService
+class ProjectServiceImpl implements ProjectService
+class IssueServiceImpl implements IssueService
+class DepartmentServiceImpl implements DepartmentService
+
+@enduml 

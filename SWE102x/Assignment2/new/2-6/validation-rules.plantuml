@@ -1,0 +1,43 @@
+@startuml
+package "Validation Rules" {
+  class ValidationRule {
+    -field: String
+    -rule: String
+    -message: String
+    -priority: Integer
+    +validate(value: Object): boolean
+    +getMessage(): String
+  }
+
+  class FieldValidator {
+    -rules: List<ValidationRule>
+    +addRule(rule: ValidationRule): void
+    +validate(value: Object): ValidationResult
+  }
+
+  class ValidationResult {
+    -isValid: boolean
+    -errors: List<String>
+    -warnings: List<String>
+    +addError(message: String): void
+    +addWarning(message: String): void
+  }
+
+  class BusinessRule {
+    -condition: String
+    -errorMessage: String
+    -severity: Severity
+    +evaluate(context: Object): boolean
+  }
+
+  enum Severity {
+    ERROR
+    WARNING
+    INFO
+  }
+
+  ValidationRule --> ValidationResult
+  FieldValidator "1" *-- "*" ValidationRule
+  BusinessRule --> Severity
+}
+@enduml 

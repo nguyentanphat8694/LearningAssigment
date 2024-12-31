@@ -1,0 +1,51 @@
+@startuml
+package "Client Architecture" {
+  package "Presentation Layer" {
+    package "Layout" {
+      [Header]
+      [Sidebar]
+      [Footer]
+    }
+    
+    package "Features" {
+      [ProjectManagement]
+      [IssueTracker]
+      [UserManagement]
+    }
+    
+    package "Shared" {
+      [Forms]
+      [Tables]
+      [Modals]
+    }
+  }
+
+  package "State Management" {
+    [Redux Store]
+    [Actions]
+    [Reducers]
+    [Selectors]
+  }
+
+  package "Services" {
+    [API Client]
+    [Auth Service]
+    [Storage Service]
+  }
+
+  Features --> [Redux Store]
+  Features --> Services
+  Shared --> Services
+  [Redux Store] --> Services
+}
+
+note right of [API Client]
+  Handles all HTTP 
+  communication with server
+end note
+
+note right of [Redux Store]
+  Centralizes application
+  state management
+end note
+@enduml 

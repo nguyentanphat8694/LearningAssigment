@@ -1,0 +1,54 @@
+@startuml
+package "Issue Domain" {
+  abstract class Issue {
+    -id: Long
+    -title: String
+    -description: String
+    -creator: User
+    -assignee: User
+    -project: Project
+    -milestone: Milestone
+    -status: IssueStatus
+    -priority: Priority
+    -createdAt: DateTime
+    -updatedAt: DateTime
+    +assign(user: User): void
+    +updateStatus(status: IssueStatus): void
+    +addComment(comment: Comment): void
+  }
+
+  class Task extends Issue {
+    -dueDate: Date
+    -estimatedHours: Integer
+    -actualHours: Integer
+    -progress: Float
+    +updateProgress(progress: Float): void
+    +logTime(hours: Integer): void
+  }
+
+  class Bug extends Issue {
+    -severity: BugSeverity
+    -reproducibleSteps: String
+    -affectedVersion: String
+    -fixedVersion: String
+    +markAsResolved(fixVersion: String): void
+  }
+
+  class Feature extends Issue {
+    -targetVersion: String
+    -acceptanceCriteria: String
+    -businessValue: Integer
+    +defineAcceptanceCriteria(criteria: String): void
+  }
+
+  class Comment {
+    -id: Long
+    -content: String
+    -author: User
+    -createdAt: DateTime
+    -updatedAt: DateTime
+  }
+
+  Issue "1" *-- "*" Comment
+}
+@enduml 

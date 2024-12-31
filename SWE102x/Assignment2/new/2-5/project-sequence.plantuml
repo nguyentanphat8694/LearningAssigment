@@ -1,0 +1,33 @@
+@startuml
+actor Manager
+participant "React App" as Client
+participant "ProjectController" as ProjCtrl
+participant "ProjectService" as ProjSvc
+participant "DepartmentService" as DeptSvc
+database "Database" as DB
+
+Manager -> Client: Create new project
+Client -> ProjCtrl: POST /api/projects
+
+activate ProjCtrl
+ProjCtrl -> DeptSvc: validateDepartment()
+DeptSvc -> DB: checkDepartmentExists()
+DB --> DeptSvc: Department status
+DeptSvc --> ProjCtrl: Validation result
+
+ProjCtrl -> ProjSvc: createProject()
+ProjSvc -> DB: save()
+DB --> ProjSvc: Project data
+ProjSvc --> ProjCtrl: Created project
+
+ProjCtrl -> ProjSvc: assignMembers()
+ProjSvc -> DB: updateProjectMembers()
+DB --> ProjSvc: Update status
+ProjSvc --> ProjCtrl: Assignment result
+
+ProjCtrl --> Client: Project details
+deactivate ProjCtrl
+
+Client --> Manager: Show success message
+
+@enduml 

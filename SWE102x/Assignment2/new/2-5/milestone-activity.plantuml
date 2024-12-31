@@ -1,0 +1,47 @@
+@startuml
+|Project Manager|
+start
+:Khởi tạo Milestone;
+:Định nghĩa mục tiêu;
+
+fork
+  :Thiết lập timeline;
+  :Xác định deadline;
+fork again
+  :Định nghĩa deliverables;
+  :Thiết lập KPIs;
+end fork
+
+:Phân công trách nhiệm;
+
+|Team Members|
+while (Milestone chưa hoàn thành?) is (yes)
+  :Thực hiện công việc;
+  :Cập nhật tiến độ;
+  :Báo cáo vướng mắc;
+  
+  |Project Manager|
+  :Review tiến độ;
+  if (Cần điều chỉnh?) then (yes)
+    :Cập nhật kế hoạch;
+    :Thông báo team;
+  else (no)
+    :Ghi nhận tiến độ;
+  endif
+endwhile (no)
+
+|Project Manager|
+:Đánh giá kết quả;
+
+if (Đạt mục tiêu?) then (yes)
+  :Đóng Milestone;
+  :Tổng kết học hỏi;
+else (no)
+  :Phân tích nguyên nhân;
+  :Lập kế hoạch khắc phục;
+endif
+
+:Cập nhật Project status;
+
+stop
+@enduml 

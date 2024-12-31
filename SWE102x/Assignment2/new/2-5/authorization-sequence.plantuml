@@ -1,0 +1,34 @@
+@startuml
+actor User
+participant "React App" as Client
+participant "AuthController" as Auth
+participant "SecurityService" as Security
+participant "RoleService" as Role
+database "Database" as DB
+
+User -> Client: Truy cập tài nguyên
+Client -> Auth: Kiểm tra quyền truy cập
+
+activate Auth
+Auth -> Security: validateAccess(userId, resource)
+
+activate Security
+Security -> Role: getUserRoles(userId)
+Role -> DB: query roles
+DB --> Role: roles data
+Role --> Security: user roles
+
+Security -> Security: checkPermissions(roles, resource)
+Security --> Auth: access result
+deactivate Security
+
+alt Có quyền truy cập
+    Auth --> Client: Cho phép truy cập
+    Client --> User: Hiển thị tài nguyên
+else Không có quyền
+    Auth --> Client: Từ chối truy cập
+    Client --> User: Thông báo lỗi
+end
+deactivate Auth
+
+@enduml 

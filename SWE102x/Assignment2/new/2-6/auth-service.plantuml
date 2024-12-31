@@ -1,0 +1,36 @@
+@startuml
+package "Authentication Service" {
+  interface AuthenticationService {
+    +login(credentials: LoginDTO): TokenResponse
+    +logout(): void
+    +refreshToken(token: String): TokenResponse
+    +validateToken(token: String): boolean
+  }
+
+  class JwtService {
+    -secretKey: String
+    -tokenValidity: Long
+    +generateToken(user: User): String
+    +validateToken(token: String): boolean
+    +extractUsername(token: String): String
+  }
+
+  class AuthenticationManager {
+    -userService: UserService
+    -jwtService: JwtService
+    +authenticate(username: String, password: String): Authentication
+    +getCurrentUser(): User
+  }
+
+  class SecurityContext {
+    -authentication: Authentication
+    -authorities: Set<GrantedAuthority>
+    +setAuthentication(auth: Authentication): void
+    +getAuthentication(): Authentication
+  }
+
+  AuthenticationService ..> JwtService
+  AuthenticationManager --> JwtService
+  AuthenticationManager --> SecurityContext
+}
+@enduml 

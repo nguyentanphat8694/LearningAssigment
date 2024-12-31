@@ -1,0 +1,66 @@
+@startuml
+actor ProjectManager
+participant "React App" as Client
+participant "ReleaseController" as ReleaseCtrl
+participant "ReleaseService" as ReleaseSvc
+participant "ProjectService" as ProjSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+
+ProjectManager -> Client: Tạo release mới
+Client -> ReleaseCtrl: POST /api/releases
+
+activate ReleaseCtrl
+ReleaseCtrl -> ProjSvc: validateProject()
+ProjSvc -> DB: checkProjectExists()
+DB --> ProjSvc: Project status
+
+ReleaseCtrl -> ReleaseSvc: createRelease()
+ReleaseSvc -> DB: save()
+DB --> ReleaseSvc: Release data
+
+ReleaseSvc -> NotifSvc: notifyProjectTeam()
+NotifSvc -> NotifSvc: sendNotification()
+
+ReleaseSvc --> ReleaseCtrl: Created release
+ReleaseCtrl --> Client: Release details
+deactivate ReleaseCtrl
+
+Client --> ProjectManager: Show success message
+
+ProjectManager -> Client: Publish release
+Client -> ReleaseCtrl: PUT /api/releases/{id}/publish
+
+activate ReleaseCtrl
+ReleaseCtrl -> ReleaseSvc: publishRelease()
+ReleaseSvc -> DB: updateReleaseStatus()
+DB --> ReleaseSvc: Update status
+
+ReleaseSvc -> NotifSvc: notifyReleasePublished()
+NotifSvc -> NotifSvc: sendNotification()
+
+ReleaseSvc --> ReleaseCtrl: Published release
+ReleaseCtrl --> Client: Release details
+deactivate ReleaseCtrl
+
+Client --> ProjectManager: Show release published
+
+alt Release fails
+    ProjectManager -> Client: Rollback release
+    Client -> ReleaseCtrl: PUT /api/releases/{id}/rollback
+    
+    activate ReleaseCtrl
+    ReleaseCtrl -> ReleaseSvc: rollbackRelease()
+    ReleaseSvc -> DB: revertReleaseStatus()
+    DB --> ReleaseSvc: Rollback status
+    
+    ReleaseSvc -> NotifSvc: notifyReleaseRollback()
+    NotifSvc -> NotifSvc: sendNotification()
+    
+    ReleaseSvc --> ReleaseCtrl: Rolled back release
+    ReleaseCtrl --> Client: Release details
+    deactivate ReleaseCtrl
+    
+    Client --> ProjectManager: Show rollback complete
+end
+@enduml 

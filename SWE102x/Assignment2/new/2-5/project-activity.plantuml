@@ -1,0 +1,29 @@
+@startuml
+start
+
+:Khởi tạo Project;
+
+fork
+  :Thiết lập thông tin cơ bản;
+  :Chọn Department;
+  :Định nghĩa mục tiêu;
+fork again
+  :Thiết lập cấu hình;
+  :Định nghĩa milestones;
+  :Thiết lập timeline;
+end fork
+
+:Phân công Project Manager;
+
+fork
+  :Thêm thành viên;
+  :Phân quyền truy cập;
+fork again
+  :Thiết lập quy trình;
+  :Định nghĩa workflow;
+end fork
+
+:Kích hoạt Project;
+
+stop
+@enduml 

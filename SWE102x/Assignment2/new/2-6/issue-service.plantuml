@@ -1,0 +1,29 @@
+@startuml
+package "Issue Service" {
+  interface IssueService {
+    +findById(id: Long): Issue
+    +create(issue: IssueDTO): Issue
+    +update(id: Long, issue: IssueDTO): Issue
+    +delete(id: Long): void
+    +assignTo(issueId: Long, userId: Long): void
+    +updateStatus(issueId: Long, status: IssueStatus): void
+  }
+
+  class IssueServiceImpl {
+    -issueRepository: IssueRepository
+    -projectService: ProjectService
+    -notificationService: NotificationService
+    +validateIssueAccess(issueId: Long, userId: Long): boolean
+    -notifyAssignee(issue: Issue): void
+  }
+
+  class IssueEventHandler {
+    +onIssueCreated(issue: Issue): void
+    +onIssueAssigned(issue: Issue): void
+    +onStatusChanged(issue: Issue): void
+  }
+
+  IssueService <|.. IssueServiceImpl
+  IssueServiceImpl --> IssueEventHandler
+}
+@enduml 

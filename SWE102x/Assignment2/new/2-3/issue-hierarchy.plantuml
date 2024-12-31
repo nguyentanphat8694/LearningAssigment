@@ -1,0 +1,68 @@
+@startuml
+abstract class Issue {
+  -id: Long
+  -title: String
+  -description: String
+  -creator: User
+  -assignee: User
+  -status: IssueStatus
+  -priority: Priority
+  -createdAt: DateTime
+  -updatedAt: DateTime
+  +updateStatus(status: IssueStatus)
+  +assign(user: User)
+  +addComment(comment: String)
+}
+
+class Task extends Issue {
+  -dueDate: Date
+  -estimatedHours: Integer
+  -actualHours: Integer
+  -progress: Float
+  +updateProgress(progress: Float)
+  +logTime(hours: Integer)
+}
+
+class Bug extends Issue {
+  -severity: BugSeverity
+  -reproducibleSteps: String
+  -affectedVersion: String
+  -fixedVersion: String
+  +markAsResolved(fixVersion: String)
+  +addReproductionSteps(steps: String)
+}
+
+class Feature extends Issue {
+  -targetVersion: String
+  -acceptanceCriteria: String
+  -businessValue: Integer
+  +defineAcceptanceCriteria(criteria: String)
+  +setTargetVersion(version: String)
+}
+
+enum IssueStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum BugSeverity {
+  MINOR
+  MAJOR
+  CRITICAL
+  BLOCKER
+}
+
+Issue --> IssueStatus
+Issue --> Priority
+Bug --> BugSeverity
+
+@enduml 

@@ -1,0 +1,41 @@
+@startuml
+interface IAuthService {
+  + login(credentials: LoginDTO): Promise<TokenResponse>
+  + logout(): Promise<void>
+  + refreshToken(token: string): Promise<TokenResponse>
+  + changePassword(passwordDTO: PasswordDTO): Promise<void>
+}
+
+interface IUserService {
+  + getUsers(): Promise<List<UserDTO>>
+  + getUser(id: Long): Promise<UserDTO>
+  + createUser(user: UserDTO): Promise<UserDTO>
+  + updateUser(id: Long, user: UserDTO): Promise<UserDTO>
+  + deleteUser(id: Long): Promise<void>
+}
+
+interface IProjectService {
+  + getProjects(): Promise<List<ProjectDTO>>
+  + getProject(id: Long): Promise<ProjectDTO>
+  + createProject(project: ProjectDTO): Promise<ProjectDTO>
+  + updateProject(id: Long, project: ProjectDTO): Promise<ProjectDTO>
+  + deleteProject(id: Long): Promise<void>
+  + addMember(projectId: Long, userId: Long): Promise<void>
+  + removeMember(projectId: Long, userId: Long): Promise<void>
+}
+
+interface IIssueService {
+  + getIssues(): Promise<List<IssueDTO>>
+  + getIssue(id: Long): Promise<IssueDTO>
+  + createIssue(issue: IssueDTO): Promise<IssueDTO>
+  + updateIssue(id: Long, issue: IssueDTO): Promise<IssueDTO>
+  + deleteIssue(id: Long): Promise<void>
+  + assignIssue(issueId: Long, userId: Long): Promise<void>
+  + updateStatus(issueId: Long, status: Status): Promise<void>
+}
+
+IAuthService <|.. AuthService
+IUserService <|.. UserService
+IProjectService <|.. ProjectService
+IIssueService <|.. IssueService
+@enduml 

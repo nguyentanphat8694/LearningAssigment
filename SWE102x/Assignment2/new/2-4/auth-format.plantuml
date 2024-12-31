@@ -1,0 +1,32 @@
+@startuml
+class LoginRequest {
+  + username: String
+  + password: String
+}
+
+class LoginResponse {
+  + token: String
+  + refreshToken: String
+  + expiresIn: Long
+  + user: UserDTO
+}
+
+class TokenRequest {
+  + refreshToken: String
+}
+
+class TokenResponse {
+  + token: String
+  + refreshToken: String
+  + expiresIn: Long
+}
+
+class PasswordChangeRequest {
+  + oldPassword: String
+  + newPassword: String
+  + confirmPassword: String
+}
+
+LoginRequest --> LoginResponse
+TokenRequest --> TokenResponse
+@enduml 

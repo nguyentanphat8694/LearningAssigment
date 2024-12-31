@@ -1,0 +1,41 @@
+@startuml
+|Project Manager|
+start
+:Lập kế hoạch Release;
+:Xác định version;
+
+fork
+  :Kiểm tra Issues;
+  :Verify Features;
+fork again
+  :Review Code;
+  :Run Tests;
+end fork
+
+|QA Team|
+:Kiểm thử Release;
+
+if (Passed QA?) then (yes)
+  :Tạo Release Notes;
+else (no)
+  :Report Issues;
+  goto Project Manager;
+endif
+
+|DevOps|
+:Prepare Release;
+:Deploy to Staging;
+
+if (Staging OK?) then (yes)
+  :Deploy to Production;
+else (no)
+  :Fix Issues;
+  goto QA Team;
+endif
+
+|Project Manager|
+:Announce Release;
+:Update Documentation;
+
+stop
+@enduml 

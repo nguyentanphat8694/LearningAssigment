@@ -1,0 +1,28 @@
+@startuml
+actor User
+participant "React App" as Client
+participant "AuthController" as Auth
+participant "UserService" as UserSvc
+participant "JWTService" as JWT
+database "Database" as DB
+
+User -> Client: Nhập thông tin đăng nhập
+Client -> Auth: POST /api/auth/login
+Auth -> UserSvc: validateCredentials()
+UserSvc -> DB: findByUsername()
+DB --> UserSvc: User data
+UserSvc -> UserSvc: verifyPassword()
+UserSvc --> Auth: Validation result
+
+alt Successful login
+    Auth -> JWT: generateToken()
+    JWT --> Auth: JWT Token
+    Auth --> Client: Return token & user info
+    Client -> Client: Store token
+    Client --> User: Redirect to dashboard
+else Invalid credentials
+    Auth --> Client: Authentication error
+    Client --> User: Show error message
+end
+
+@enduml 

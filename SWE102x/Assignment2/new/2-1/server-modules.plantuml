@@ -1,0 +1,59 @@
+@startuml
+package "Server Architecture" {
+  package "Web Layer" {
+    package "Controllers" {
+      [UserController]
+      [ProjectController]
+      [IssueController]
+    }
+    
+    package "DTOs" {
+      [RequestDTOs]
+      [ResponseDTOs]
+    }
+  }
+
+  package "Business Layer" {
+    package "Services" {
+      [UserService]
+      [ProjectService]
+      [IssueService]
+    }
+    
+    package "Domain" {
+      [DomainModels]
+      [BusinessRules]
+      [Events]
+    }
+  }
+
+  package "Data Layer" {
+    package "Repositories" {
+      [UserRepository]
+      [ProjectRepository]
+      [IssueRepository]
+    }
+    
+    package "Entities" {
+      [EntityModels]
+      [Mappings]
+    }
+  }
+
+  Controllers --> DTOs
+  Controllers --> Services
+  Services --> Domain
+  Services --> Repositories
+  Repositories --> Entities
+}
+
+note right of Services
+  Contains core business logic
+  and transaction management
+end note
+
+note right of Repositories
+  Handles all database
+  operations
+end note
+@enduml 

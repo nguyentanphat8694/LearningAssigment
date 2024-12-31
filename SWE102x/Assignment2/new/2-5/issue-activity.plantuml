@@ -1,0 +1,41 @@
+@startuml
+|Người tạo|
+start
+:Tạo Issue mới;
+:Điền thông tin Issue;
+:Chọn loại Issue;
+
+|Project Manager|
+:Review Issue;
+
+if (Issue hợp lệ?) then (yes)
+  :Phân công người thực hiện;
+  :Thiết lập priority;
+else (no)
+  :Yêu cầu bổ sung thông tin;
+  :Cập nhật Issue;
+endif
+
+|Người được assign|
+:Nhận Issue;
+:Cập nhật trạng thái;
+
+while (Issue chưa hoàn thành?) is (yes)
+  :Thực hiện công việc;
+  :Cập nhật tiến độ;
+endwhile (no)
+
+:Đánh dấu hoàn thành;
+
+|Project Manager|
+:Review kết quả;
+
+if (Kết quả đạt yêu cầu?) then (yes)
+  :Đóng Issue;
+else (no)
+  :Yêu cầu chỉnh sửa;
+  goto Người được assign;
+endif
+
+stop
+@enduml 

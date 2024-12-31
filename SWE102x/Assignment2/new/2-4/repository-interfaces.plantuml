@@ -1,0 +1,34 @@
+@startuml
+interface IBaseRepository<T, ID> {
+  + findAll(): List<T>
+  + findById(id: ID): Optional<T>
+  + save(entity: T): T
+  + delete(entity: T): void
+  + deleteById(id: ID): void
+}
+
+interface IUserRepository {
+  + findByUsername(username: String): Optional<User>
+  + findByEmail(email: String): Optional<User>
+  + findByDepartment(departmentId: Long): List<User>
+}
+
+interface IProjectRepository {
+  + findByDepartment(departmentId: Long): List<Project>
+  + findByMember(userId: Long): List<Project>
+  + findActive(): List<Project>
+}
+
+interface IIssueRepository {
+  + findByProject(projectId: Long): List<Issue>
+  + findByAssignee(userId: Long): List<Issue>
+  + findByStatus(status: IssueStatus): List<Issue>
+}
+
+IBaseRepository <|-- IUserRepository
+IBaseRepository <|-- IProjectRepository
+IBaseRepository <|-- IIssueRepository
+
+note "Generic type parameters" as N1
+IBaseRepository .. N1
+@enduml 

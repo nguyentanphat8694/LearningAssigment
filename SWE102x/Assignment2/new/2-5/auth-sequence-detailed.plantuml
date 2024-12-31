@@ -1,0 +1,58 @@
+@startuml
+actor User
+box "Client-side" #LightBlue
+participant "React App" as Client
+participant "Auth Store" as AuthStore
+participant "API Client" as API
+end box
+
+box "Server-side" #LightYellow
+participant "AuthController" as Auth
+participant "UserService" as UserSvc
+participant "JWTService" as JWT
+database "Database" as DB
+end box
+
+User -> Client: Nhập thông tin đăng nhập
+Client -> AuthStore: dispatch(loginAction)
+
+activate AuthStore
+AuthStore -> API: login(credentials)
+
+activate API
+API -> API: setHeaders()
+API -> Auth: POST /api/auth/login
+activate Auth
+
+Auth -> UserSvc: validateCredentials()
+UserSvc -> DB: findByUsername()
+DB --> UserSvc: User data
+UserSvc -> UserSvc: verifyPassword()
+UserSvc --> Auth: Validation result
+
+alt Successful login
+    Auth -> JWT: generateToken()
+    JWT --> Auth: JWT Token
+    Auth --> API: 200 OK + token & user info
+    
+    API -> API: setAuthToken()
+    API --> AuthStore: Success response
+    
+    AuthStore -> AuthStore: saveToken()
+    AuthStore -> AuthStore: saveUserInfo()
+    AuthStore --> Client: Update auth state
+    
+    Client -> Client: Redirect to dashboard
+    Client --> User: Show success message
+else Invalid credentials
+    Auth --> API: 401 Unauthorized
+    API --> AuthStore: Error response
+    AuthStore --> Client: Update error state
+    Client --> User: Show error message
+end
+
+deactivate Auth
+deactivate API
+deactivate AuthStore
+
+@enduml 

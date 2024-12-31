@@ -1,0 +1,83 @@
+@startuml
+actor ProjectManager
+box "Client-side" #LightBlue
+participant "React App" as Client
+participant "Milestone Store" as MileStore
+participant "API Client" as API
+end box
+
+box "Server-side" #LightYellow
+participant "MilestoneController" as MileCtrl
+participant "MilestoneService" as MileSvc
+participant "ProjectService" as ProjSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+end box
+
+ProjectManager -> Client: Tạo milestone mới
+Client -> MileStore: dispatch(createMilestone)
+
+activate MileStore
+MileStore -> API: createMilestone(data)
+
+activate API
+API -> API: setAuthHeader()
+API -> MileCtrl: POST /api/milestones
+
+activate MileCtrl
+MileCtrl -> ProjSvc: validateProject()
+ProjSvc -> DB: checkProjectExists()
+DB --> ProjSvc: Project status
+
+MileCtrl -> MileSvc: createMilestone()
+MileSvc -> DB: save()
+DB --> MileSvc: Milestone data
+
+MileSvc -> NotifSvc: notifyProjectTeam()
+NotifSvc -> NotifSvc: sendNotification()
+
+MileCtrl --> API: 201 Created + milestone data
+deactivate MileCtrl
+
+API -> API: transformResponse()
+API --> MileStore: Success response
+
+MileStore -> MileStore: updateMilestones()
+MileStore --> Client: Update milestone state
+deactivate API
+
+Client -> Client: Navigate to milestone
+Client --> ProjectManager: Show success message
+deactivate MileStore
+
+ProjectManager -> Client: Cập nhật tiến độ
+Client -> MileStore: dispatch(updateProgress)
+
+activate MileStore
+MileStore -> API: updateMilestoneProgress(id, progress)
+
+activate API
+API -> MileCtrl: PUT /api/milestones/{id}/progress
+
+activate MileCtrl
+MileCtrl -> MileSvc: updateProgress()
+MileSvc -> DB: updateMilestoneProgress()
+DB --> MileSvc: Update status
+
+MileSvc -> NotifSvc: notifyProgressUpdate()
+NotifSvc -> NotifSvc: sendNotification()
+
+MileCtrl --> API: 200 OK + updated milestone
+deactivate MileCtrl
+
+API -> API: transformResponse()
+API --> MileStore: Success response
+
+MileStore -> MileStore: updateMilestone()
+MileStore --> Client: Update milestone state
+deactivate API
+
+Client --> ProjectManager: Show progress updated
+deactivate MileStore
+
+@enduml 

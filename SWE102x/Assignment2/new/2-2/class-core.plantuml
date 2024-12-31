@@ -1,0 +1,106 @@
+@startuml
+abstract class User {
+  -id: Long
+  -username: String
+  -email: String
+  -password: String
+  -fullName: String
+  -phone: String
+  -status: UserStatus
+  +getAssignedIssues()
+  +getProjects()
+}
+
+class Admin extends User {
+  +manageUsers()
+  +manageDepartments()
+}
+
+class Manager extends User {
+  +manageProjects()
+  +assignTasks()
+}
+
+class Member extends User {
+  +updateTaskStatus()
+  +createIssue()
+}
+
+class Department {
+  -id: Long
+  -name: String
+  -description: String
+  -manager: User
+  -status: DepartmentStatus
+  +getMembers()
+  +getProjects()
+}
+
+class Project {
+  -id: Long
+  -name: String
+  -description: String
+  -startDate: Date
+  -endDate: Date
+  -status: ProjectStatus
+  +getMilestones()
+  +getReleases()
+  +getIssues()
+}
+
+abstract class Issue {
+  -id: Long
+  -title: String
+  -description: String
+  -creator: User
+  -assignee: User
+  -status: IssueStatus
+  -priority: Priority
+  -createdAt: DateTime
+  -updatedAt: DateTime
+  +updateStatus()
+  +assign()
+}
+
+class Task extends Issue {
+  -dueDate: Date
+  -estimatedHours: Integer
+}
+
+class Bug extends Issue {
+  -severity: Severity
+  -reproducibleSteps: String
+}
+
+class Feature extends Issue {
+  -targetVersion: String
+  -acceptanceCriteria: String
+}
+
+class Milestone {
+  -id: Long
+  -name: String
+  -description: String
+  -startDate: Date
+  -endDate: Date
+  -status: MilestoneStatus
+  +getProgress()
+}
+
+class Release {
+  -id: Long
+  -version: String
+  -notes: String
+  -releaseDate: Date
+  -status: ReleaseStatus
+  +publish()
+}
+
+Department "1" *-- "*" User
+Department "1" *-- "*" Project
+Project "1" *-- "*" Milestone
+Project "1" *-- "*" Release
+Project "1" *-- "*" Issue
+User "*" -- "*" Project
+Issue "*" -- "1" User : assigned to
+@enduml 

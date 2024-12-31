@@ -1,0 +1,43 @@
+@startuml
+actor User
+participant "React App" as Client
+participant "IssueController" as IssueCtrl
+participant "IssueService" as IssueSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+
+User -> Client: Create new issue
+Client -> IssueCtrl: POST /api/issues
+
+activate IssueCtrl
+IssueCtrl -> IssueSvc: createIssue()
+IssueSvc -> DB: save()
+DB --> IssueSvc: Issue data
+
+IssueSvc -> NotifSvc: notifyAssignee()
+NotifSvc -> NotifSvc: sendNotification()
+
+IssueSvc --> IssueCtrl: Created issue
+IssueCtrl --> Client: Issue details
+deactivate IssueCtrl
+
+Client --> User: Show success message
+
+User -> Client: Update issue status
+Client -> IssueCtrl: PUT /api/issues/{id}/status
+
+activate IssueCtrl
+IssueCtrl -> IssueSvc: updateStatus()
+IssueSvc -> DB: updateIssueStatus()
+DB --> IssueSvc: Update status
+
+IssueSvc -> NotifSvc: notifyStatusChange()
+NotifSvc -> NotifSvc: sendNotification()
+
+IssueSvc --> IssueCtrl: Updated issue
+IssueCtrl --> Client: Issue details
+deactivate IssueCtrl
+
+Client --> User: Show status update
+
+@enduml 

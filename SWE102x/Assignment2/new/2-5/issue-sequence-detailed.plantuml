@@ -1,0 +1,78 @@
+@startuml
+actor User
+box "Client-side" #LightBlue
+participant "React App" as Client
+participant "Issue Store" as IssueStore
+participant "API Client" as API
+end box
+
+box "Server-side" #LightYellow
+participant "IssueController" as IssueCtrl
+participant "IssueService" as IssueSvc
+participant "NotificationService" as NotifSvc
+database "Database" as DB
+end box
+
+User -> Client: Create new issue
+Client -> IssueStore: dispatch(createIssue)
+
+activate IssueStore
+IssueStore -> API: createIssue(data)
+
+activate API
+API -> API: setAuthHeader()
+API -> IssueCtrl: POST /api/issues
+
+activate IssueCtrl
+IssueCtrl -> IssueSvc: createIssue()
+IssueSvc -> DB: save()
+DB --> IssueSvc: Issue data
+
+IssueSvc -> NotifSvc: notifyAssignee()
+NotifSvc -> NotifSvc: sendNotification()
+
+IssueCtrl --> API: 201 Created + issue data
+deactivate IssueCtrl
+
+API -> API: transformResponse()
+API --> IssueStore: Success response
+
+IssueStore -> IssueStore: updateIssues()
+IssueStore --> Client: Update issue state
+deactivate API
+
+Client -> Client: Navigate to issue
+Client --> User: Show success message
+deactivate IssueStore
+
+User -> Client: Update issue status
+Client -> IssueStore: dispatch(updateStatus)
+
+activate IssueStore
+IssueStore -> API: updateIssueStatus(id, status)
+
+activate API
+API -> IssueCtrl: PUT /api/issues/{id}/status
+
+activate IssueCtrl
+IssueCtrl -> IssueSvc: updateStatus()
+IssueSvc -> DB: updateIssueStatus()
+DB --> IssueSvc: Update status
+
+IssueSvc -> NotifSvc: notifyStatusChange()
+NotifSvc -> NotifSvc: sendNotification()
+
+IssueCtrl --> API: 200 OK + updated issue
+deactivate IssueCtrl
+
+API -> API: transformResponse()
+API --> IssueStore: Success response
+
+IssueStore -> IssueStore: updateIssue()
+IssueStore --> Client: Update issue state
+deactivate API
+
+Client --> User: Show status update
+deactivate IssueStore
+
+@enduml 

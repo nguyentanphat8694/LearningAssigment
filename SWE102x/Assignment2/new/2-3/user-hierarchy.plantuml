@@ -1,0 +1,54 @@
+@startuml
+abstract class User {
+  -id: Long
+  -username: String
+  -email: String
+  -password: String
+  -fullName: String
+  -status: UserStatus
+  +getProfile(): UserProfile
+  +updateProfile(profile: UserProfile)
+  +changePassword(newPassword: String)
+}
+
+class Admin extends User {
+  +createUser(userData: UserDTO): User
+  +deleteUser(userId: Long)
+  +updateUserRole(userId: Long, role: Role)
+  +manageSystemConfig()
+}
+
+class Manager extends User {
+  -managedDepartments: List<Department>
+  -managedProjects: List<Project>
+  +assignTask(task: Task, user: User)
+  +createProject(projectData: ProjectDTO)
+  +generateReports()
+  +reviewWork(issue: Issue)
+}
+
+class Member extends User {
+  -assignedTasks: List<Task>
+  -participatedProjects: List<Project>
+  +updateTaskStatus(task: Task, status: Status)
+  +createIssue(issueData: IssueDTO)
+  +commentOnIssue(issue: Issue, comment: String)
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+User --> UserStatus
+User --> Role
+
+@enduml 

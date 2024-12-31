@@ -1,0 +1,26 @@
+@startuml
+package "Base Repository" {
+  interface BaseRepository<T, ID> {
+    +findAll(): List<T>
+    +findById(id: ID): Optional<T>
+    +save(entity: T): T
+    +delete(entity: T): void
+    +deleteById(id: ID): void
+    +count(): Long
+  }
+
+  interface PagingAndSortingRepository<T, ID> {
+    +findAll(pageable: Pageable): Page<T>
+    +findAll(sort: Sort): List<T>
+  }
+
+  interface JpaSpecificationExecutor<T> {
+    +findAll(spec: Specification<T>): List<T>
+    +findOne(spec: Specification<T>): Optional<T>
+    +count(spec: Specification<T>): Long
+  }
+
+  BaseRepository <|-- PagingAndSortingRepository
+  PagingAndSortingRepository <|-- JpaSpecificationExecutor
+}
+@enduml 

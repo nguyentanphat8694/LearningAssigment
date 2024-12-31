@@ -1,0 +1,37 @@
+@startuml
+class User {
+  -id: Long
+  -username: String
+}
+
+class Department {
+  -id: Long
+  -name: String
+}
+
+class Project {
+  -id: Long
+  -name: String
+}
+
+class Issue {
+  -id: Long
+  -title: String
+}
+
+User "*" -- "1" Department : belongs to >
+Project "*" -- "1" Department : managed by >
+Issue "*" -- "1" Project : belongs to >
+
+User "*" -- "*" Project : participates in >
+User "1" -- "*" Issue : assigned to >
+
+note "Many-to-One" as N1
+note "Many-to-Many" as N2
+
+Department .. N1
+Project .. N1
+Issue .. N1
+User .. N2
+
+@enduml 

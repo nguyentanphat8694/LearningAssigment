@@ -1,0 +1,53 @@
+@startuml
+|Department Manager|
+start
+:Khởi tạo Department;
+
+fork
+  :Thiết lập cơ cấu tổ chức;
+  :Định nghĩa vai trò;
+fork again
+  :Xác định quy trình làm việc;
+  :Thiết lập KPIs;
+end fork
+
+:Tuyển dụng/Bổ nhiệm nhân sự;
+
+|HR|
+:Tạo tài khoản người dùng;
+:Phân quyền truy cập;
+
+|Department Manager|
+:Phân công dự án;
+
+fork
+  :Quản lý nhân sự;
+  while (Cần điều chỉnh nhân sự?) is (yes)
+    :Đánh giá hiệu suất;
+    :Điều chỉnh phân công;
+  endwhile (no)
+fork again
+  :Quản lý dự án;
+  while (Có dự án đang chạy?) is (yes)
+    :Theo dõi tiến độ;
+    :Review chất lượng;
+  endwhile (no)
+end fork
+
+|HR|
+:Cập nhật thông tin nhân sự;
+
+|Department Manager|
+:Đánh giá hiệu quả Department;
+
+if (Cần tái cấu trúc?) then (yes)
+  :Lập kế hoạch tái cấu trúc;
+  :Thực hiện điều chỉnh;
+else (no)
+  :Duy trì hoạt động;
+endif
+
+:Báo cáo định kỳ;
+
+stop
+@enduml 

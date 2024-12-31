@@ -1,0 +1,29 @@
+@startuml
+package "Department Service" {
+  interface DepartmentService {
+    +findById(id: Long): Department
+    +create(department: DepartmentDTO): Department
+    +update(id: Long, department: DepartmentDTO): Department
+    +delete(id: Long): void
+    +addMember(deptId: Long, userId: Long): void
+    +removeMember(deptId: Long, userId: Long): void
+  }
+
+  class DepartmentServiceImpl {
+    -departmentRepository: DepartmentRepository
+    -userService: UserService
+    -notificationService: NotificationService
+    +validateDepartmentAccess(deptId: Long, userId: Long): boolean
+    -notifyDepartmentUpdate(department: Department): void
+  }
+
+  class DepartmentEventHandler {
+    +onDepartmentCreated(department: Department): void
+    +onMemberAdded(department: Department, user: User): void
+    +onMemberRemoved(department: Department, user: User): void
+  }
+
+  DepartmentService <|.. DepartmentServiceImpl
+  DepartmentServiceImpl --> DepartmentEventHandler
+}
+@enduml 
